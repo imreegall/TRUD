@@ -1,0 +1,19 @@
+@import fonts, mixins, reset, variables
+
+\:root
+  text-rendering: optimizeLegibility
+  -webkit-font-smoothing: antialiased
+  -moz-osx-font-smoothing: grayscale
+  -webkit-text-size-adjust: 100%
+  --rangeInput: black
+
+body
+  background-color: $gray
+
+.only-mb
+  @media (min-width: $desktopScreenMinWidth)
+    display: none !important
+
+.only-ds
+  @media (max-width: $mobileScreenMaxWidth)
+    display: none !important
