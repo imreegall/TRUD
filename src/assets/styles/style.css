@@ -1,60 +1,60 @@
 @font-face {
-  font-family: "BebasNeue";
-  src: local("BebasNeue Regular"), local("BebasNeue-Regular"), url("/src/assets/fonts/BebasNeue/BebasNeue-Regular.ttf") format("truetype");
+  font-family: "Raleway";
+  src: local("Raleway Regular"), local("Raleway-Regular"), url("/src/assets/fonts/Raleway/Raleway-Regular.ttf") format("truetype");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
-  font-family: "Inter";
-  src: local("Inter Regular"), local("Inter-Regular"), url("/src/assets/fonts/Inter/Inter-Regular.ttf") format("truetype");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: "Inter";
-  src: local("Inter Medium"), local("Inter-Medium"), url("/src/assets/fonts/Inter/Inter-Medium.ttf") format("truetype");
+  font-family: "Raleway";
+  src: local("Raleway Medium"), local("Raleway-Medium"), url("/src/assets/fonts/Raleway/Raleway-Medium.ttf") format("truetype");
   font-weight: 500;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
-  font-family: "Inter";
-  src: local("Inter SemiBold"), local("Inter-SemiBold"), url("/src/assets/fonts/Inter/Inter-SemiBold.ttf") format("truetype");
+  font-family: "Raleway";
+  src: local("Raleway SemiBold"), local("Raleway-SemiBold"), url("/src/assets/fonts/Raleway/Raleway-SemiBold.ttf") format("truetype");
   font-weight: 600;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
-  font-family: "Inter";
-  src: local("Inter Bold"), local("Inter-Bold"), url("/src/assets/fonts/Inter/Inter-Bold.ttf") format("truetype");
-  font-weight: 700;
+  font-family: "Manrope";
+  src: local("Manrope Regular"), local("Manrope-Regular"), url("/src/assets/fonts/Manrope/Manrope-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Manrope";
+  src: local("Manrope SemiBold"), local("Manrope-SemiBold"), url("/src/assets/fonts/Manrope/Manrope-SemiBold.ttf") format("truetype");
+  font-weight: 600;
   font-style: normal;
   font-display: swap;
 }
 h1 {
-  font-family: BebasNeue, "Calibri Light", sans-serif;
-  font-weight: 400;
-}
-
-h2 {
-  font-family: Inter, "Calibri Light", sans-serif;
-  font-weight: 700;
-}
-
-h3 {
-  font-family: Inter, "Calibri Light", sans-serif;
+  font-family: Raleway, "Calibri Light", sans-serif;
   font-weight: 600;
 }
 
-h4 {
-  font-family: Inter, "Calibri Light", sans-serif;
+h2 {
+  font-family: Raleway, "Calibri Light", sans-serif;
   font-weight: 500;
 }
 
+h3 {
+  font-family: Raleway, "Calibri Light", sans-serif;
+  font-weight: 400;
+}
+
+h4 {
+  font-family: Manrope, "Calibri Light", sans-serif;
+  font-weight: 600;
+}
+
 h5 {
-  font-family: Inter, "Calibri Light", sans-serif;
+  font-family: Manrope, "Calibri Light", sans-serif;
   font-weight: 400;
 }
 
@@ -81,20 +81,15 @@ h5 {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
-  --rangeInput: black;
 }
 
-body {
-  background-color: #EFEFEF;
-}
-
-@media (min-width: 1500px) {
+@media (min-width: 1920px) {
   .only-mb {
     display: none !important;
   }
 }
 
-@media (max-width: 1499px) {
+@media (max-width: 1919px) {
   .only-ds {
     display: none !important;
   }
