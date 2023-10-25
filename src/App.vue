@@ -34,8 +34,8 @@ export default {
   min-height: 100vh
 
   @media (min-width: $desktopScreenMinWidth)
-    padding: 40px 0 168px
+    padding: 40px 0 130px
 
   @media (max-width: $mobileScreenMaxWidth)
-    padding: 20px 0 60px
+    padding: 25px 0 92px
 </style>

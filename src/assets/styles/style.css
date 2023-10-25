@@ -74,6 +74,17 @@ h5 {
   line-height: inherit;
   font-family: inherit;
   font-weight: inherit;
+  scroll-behavior: smooth;
+}
+@media (min-width: 1280px) {
+  * {
+    scroll-margin-top: 50px;
+  }
+}
+@media (max-width: 1279px) {
+  * {
+    scroll-margin-top: 20px;
+  }
 }
 
 :root {

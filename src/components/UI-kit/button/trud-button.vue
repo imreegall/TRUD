@@ -18,31 +18,7 @@ export default defineComponent({
         return "transparent"
       },
       validator(type) {
-        return ['transparent', 'disabled', 'darkGreen'].includes(type)
-      },
-    },
-
-    borderRadius: {
-      type: String,
-      default() {
-        return "large"
-      },
-      validator(borderRadius) {
-        return ['small', 'large'].includes(borderRadius)
-      },
-    },
-
-    width: {
-      type: String,
-      default() {
-        return "unset"
-      },
-    },
-
-    maxWidth: {
-      type: String,
-      default() {
-        return "unset"
+        return ['transparent', 'green', 'darkGreen'].includes(type)
       },
     },
   },
@@ -51,18 +27,9 @@ export default defineComponent({
     buttonClasses() {
       const buttonClasses = {}
       buttonClasses[this.type] = true
-      buttonClasses['border-' + this.borderRadius] = true
 
       return buttonClasses
     },
-
-    buttonStyles() {
-      const buttonStyles = {}
-      buttonStyles['width'] = this.width
-      buttonStyles['max-width'] = this.maxWidth
-
-      return buttonStyles
-    }
   },
 })
 </script>
@@ -71,7 +38,6 @@ export default defineComponent({
   <button
       class="trud-button"
       :class="buttonClasses"
-      :style="buttonStyles"
   >
     <h4 v-html="title" />
   </button>
@@ -79,9 +45,6 @@ export default defineComponent({
 
 <style scoped lang="sass">
 .trud-button
-  padding: 14px 30px 16px
-  font-size: 20px
-  line-height: 120%
   white-space: nowrap
   user-select: none
   display: flex
@@ -95,28 +58,27 @@ export default defineComponent({
     > *
       top: 1px
 
-  &.border-large
-    +border-radius(999px)
-
-  &.border-small
-    +border-radius(6px)
-
   &.transparent
-    border: 1px solid $green1
+    border: 1px solid $green3
     background-color: transparent
     color: $green3
 
     &:hover
       background-color: $green2
 
-  &.disabled
-    padding: 15px 30px 17px
-    background-color: $green1
+  &.green
+    background-color: $green3
     color: $green4
 
-    &:active
-      > *
-        top: 0px
+    &:hover
+      background-color: $green7
+
+  &.darkGreen
+    background-color: $green11
+    color: $white5
+
+    &:hover
+      background-color: $green12
 
   > *
     position: relative

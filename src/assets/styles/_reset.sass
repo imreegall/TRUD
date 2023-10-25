@@ -1,4 +1,4 @@
-@import 'mixins'
+@import 'mixins', 'variables'
 
 *
   margin: 0
@@ -14,3 +14,10 @@
   line-height: inherit
   font-family: inherit
   font-weight: inherit
+  scroll-behavior: smooth
+
+  @media (min-width: $desktopScreenMinWidth)
+    scroll-margin-top: 50px
+
+  @media (max-width: $mobileScreenMaxWidth)
+    scroll-margin-top: 20px

@@ -14,6 +14,12 @@ export default defineComponent({
 
 <template>
   <div class="trud-header">
+    <div class="burger only-mb">
+      <div class="line"></div>
+
+      <div class="line"></div>
+    </div>
+
     <div class="logo-wrapper">
       <div class="logo"></div>
 
@@ -21,21 +27,21 @@ export default defineComponent({
     </div>
 
     <nav class="only-ds">
-      <h4>Litepaper</h4>
+      <a href="#litepaper"><h4>Litepaper</h4></a>
 
-      <h4>Ecosystem</h4>
+      <a href="#ecosystem"><h4>Ecosystem</h4></a>
 
-      <h4>Tokenomic</h4>
+      <a href="#tokenomic"><h4>Tokenomic</h4></a>
 
-      <h4>Roadmap</h4>
+      <a href="#roadmap"><h4>Roadmap</h4></a>
 
-      <h4>Community</h4>
+      <a href="#community"><h4>Community</h4></a>
     </nav>
 
-    <div class="buttons-group only-ds">
-      <trud-button title="Room" type="transparent" border-radius="large" />
+    <div class="buttons-group">
+      <trud-button class="button" title="Room" type="transparent" />
 
-      <trud-button title="Connect wallet" type="disabled" border-radius="large" />
+      <trud-button class="button" title="Connect wallet" type="green" />
     </div>
   </div>
 </template>
@@ -43,21 +49,50 @@ export default defineComponent({
 <style scoped lang="sass">
 .trud-header
   display: flex
-  align-items: center
   width: 100%
   justify-content: space-between
   padding: 0 20px
 
   @media (min-width: $desktopScreenMinWidth)
     max-width: calc(1920px - 100px * 2 + 20px * 2)
+    align-items: center
+    gap: 50px
 
   @media (max-width: $mobileScreenMaxWidth)
+    align-items: flex-start
+
+  .burger
+    display: flex
+    flex-direction: column
+    gap: 7px
+    width: 40px
+    aspect-ratio: 1
+    justify-content: center
+    align-items: center
+
+    &:hover
+      cursor: pointer
+
+      .line
+        background-color: $green7
+
+    .line
+      height: 5px
+      width: 33px
+      background-color: $green3
+      +border-radius(999px)
 
   .logo-wrapper
     display: flex
     align-items: center
     gap: 10px
     +user-select(none)
+    margin-left: 0
+
+    @media (min-width: $desktopScreenMinWidth)
+
+    @media (max-width: $mobileScreenMaxWidth)
+      margin-top: 5px
 
     .logo
       +background-image-settings()
@@ -68,17 +103,18 @@ export default defineComponent({
         width: 73px
 
       @media (max-width: $mobileScreenMaxWidth)
-        width: 50px
+        width: 30px
 
     > .title
-      line-height: 110%
       color: $white1
 
       @media (min-width: $desktopScreenMinWidth)
         font-size: 50px
+        line-height: 55px
 
       @media (max-width: $mobileScreenMaxWidth)
-        font-size: 30px
+        font-size: 24px
+        line-height: 26px
 
   nav
     display: flex
@@ -90,6 +126,41 @@ export default defineComponent({
 
   .buttons-group
     display: flex
-    gap: 30px
-    align-items: center
+
+    @media (min-width: $desktopScreenMinWidth)
+      gap: 10px 30px
+      align-items: center
+      flex-wrap: wrap-reverse
+      justify-content: flex-end
+
+    @media (max-width: $mobileScreenMaxWidth)
+      gap: 5px
+      flex-direction: column-reverse
+      align-items: flex-end
+      margin-top: 7.5px
+
+    .button
+      +border-radius(999px)
+
+      &:first-child
+        @media (min-width: $desktopScreenMinWidth)
+          font-size: 20px
+          line-height: 14px
+          padding: 13px 30px 15px
+
+        @media (max-width: $mobileScreenMaxWidth)
+          font-size: 12px
+          line-height: 9px
+          padding: 6px 9px
+
+      &:last-child
+        @media (min-width: $desktopScreenMinWidth)
+          font-size: 20px
+          line-height: 14px
+          padding: 14px 30px 16px
+
+        @media (max-width: $mobileScreenMaxWidth)
+          font-size: 12px
+          line-height: 9px
+          padding: 8px 12px
 </style>

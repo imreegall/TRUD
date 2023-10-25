@@ -26,7 +26,7 @@ export default defineComponent({
 
 <template>
   <div class="trud-footer-socials">
-    <h1 class="title">OUR SOCIALS</h1>
+    <h1 class="title">Our socials</h1>
 
     <main>
       <div class="social">
@@ -90,15 +90,15 @@ export default defineComponent({
     gap: 40px
 
   > .title
-    line-height: 140%
+    color: $white4
 
     @media (min-width: $desktopScreenMinWidth)
       font-size: 36px
-      color: $white2
+      line-height: 26px
 
     @media (max-width: $mobileScreenMaxWidth)
       font-size: 24px
-      color: $white4
+      line-height: 17px
 
   main
     display: flex
@@ -108,6 +108,8 @@ export default defineComponent({
     width: 100%
 
     .social
+      +user-select(none)
+
       @media (min-width: $desktopScreenMinWidth)
         background-color: $green6
         +border-radius(20px)
@@ -119,11 +121,26 @@ export default defineComponent({
         flex-basis: 100%
         color: $green3
         font-size: 20px
+        line-height: 14px
         max-width: 156px
+
+        &:hover
+          cursor: pointer
+          background-color: $green8
 
       @media (max-width: $mobileScreenMaxWidth)
         &:first-child
           order: 1
+
+        &:hover
+          cursor: pointer
+
+      &:active
+        > *
+          top: 1px
+
+      > *
+        position: relative
 
       > .title
         @media (min-width: $desktopScreenMinWidth)

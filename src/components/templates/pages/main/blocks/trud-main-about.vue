@@ -13,7 +13,7 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="trud-main-about">
+  <div class="trud-main-about" id="litepaper">
     <h1 class="title">A New Economic Concept</h1>
 
     <main>
@@ -43,12 +43,9 @@ export default defineComponent({
     </main>
 
     <trud-button
-        class="only-ds"
-        title="Read Litepaper"
-        type="disabled"
-        border-radius="small"
-        width="100%"
-        max-width="393px"
+        class="button"
+        title="READ LITEPAPER"
+        type="green"
     />
   </div>
 </template>
@@ -73,31 +70,47 @@ export default defineComponent({
     margin-top: 80px
 
   > .title
-    line-height: 140%
     text-align: center
 
     @media (min-width: $desktopScreenMinWidth)
       font-size: 36px
+      line-height: 26px
 
     @media (max-width: $mobileScreenMaxWidth)
       font-size: 24px
+      line-height: 17px
 
   main
     display: flex
     flex-direction: column
-    align-items: center
     gap: calc(24px * 1.4)
     line-height: 140%
-    text-align: left
 
     @media (min-width: $desktopScreenMinWidth)
       font-size: 24px
+      text-align: center
+      align-items: center
 
     @media (max-width: $mobileScreenMaxWidth)
       font-size: 17px
       font-weight: 400
       color: $white2
+      text-align: left
+      align-items: flex-start
 
       > *:first-child
         text-align: center
+
+  .button
+    font-size: 20px
+    line-height: 14px
+    padding: 18px 10px
+    +border-radius(6px)
+    width: 100%
+
+    @media (min-width: $desktopScreenMinWidth)
+      max-width: 393px
+
+    @media (max-width: $mobileScreenMaxWidth)
+      max-width: 248px
 </style>
