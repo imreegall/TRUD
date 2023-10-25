@@ -6,14 +6,58 @@ import trudButton from "@/components/UI-kit/button/trud-button.vue";
 export default defineComponent({
   name: "trud-header",
 
+  data() {
+    return {
+      isScrolled: false,
+    }
+  },
+
   components: {
     trudButton,
   },
+
+  mounted() {
+    if (window.scrollY > 0) {
+      if (this.isScrolled) {
+        return
+      }
+
+      this.isScrolled = true
+    } else {
+      if (!this.isScrolled) {
+        return
+      }
+
+      this.isScrolled = false
+    }
+
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 0) {
+        if (this.isScrolled) {
+          return
+        }
+
+        this.isScrolled = true
+      } else {
+        if (!this.isScrolled) {
+          return
+        }
+
+        this.isScrolled = false
+      }
+    })
+  },
+
+  watch: {
+    isScrolled() {
+      this.$refs.header.classList.toggle('active')
+    }
+  }
 })
 </script>
 
 <template>
-  <div class="trud-header">
+  <div class="trud-header" ref="header">
     <div class="burger only-mb">
       <div class="line"></div>
 
@@ -54,9 +98,26 @@ export default defineComponent({
   padding: 0 20px
 
   @media (min-width: $desktopScreenMinWidth)
-    max-width: calc(1920px - 100px * 2 + 20px * 2)
+    max-width: calc(1920px - 315px * 2 + 20px * 2)
     align-items: center
     gap: 50px
+    position: fixed
+    top: 40px
+    z-index: 999
+    +border-radius(999px)
+
+    &.active
+      background-color: $green13
+      padding: 16px 40px
+      max-width: calc(1920px - 335px * 2 + 20px * 2)
+
+      .logo-wrapper
+
+        > .title
+          display: none
+
+        .logo
+          width: 50px !important
 
   @media (max-width: $mobileScreenMaxWidth)
     align-items: flex-start
@@ -119,7 +180,7 @@ export default defineComponent({
   nav
     display: flex
     align-items: baseline
-    gap: 32px
+    gap: 24px
     line-height: 120%
     font-size: 20px
     color: $white2

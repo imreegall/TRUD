@@ -104,7 +104,7 @@ export default defineComponent({
     display: flex
     flex-wrap: wrap
     justify-content: center
-    gap: 40px
+    gap: 30px
     width: 100%
 
     .social

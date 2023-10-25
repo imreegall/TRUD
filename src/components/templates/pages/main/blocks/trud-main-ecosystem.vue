@@ -77,7 +77,7 @@ export default defineComponent({
   @media (min-width: $desktopScreenMinWidth)
     gap: 80px
     margin-top: 130px
-    max-width: calc(1920px - 100px * 2 + 20px * 2)
+    max-width: calc(1920px - 315px * 2 + 20px * 2)
 
   @media (max-width: $mobileScreenMaxWidth)
     gap: 40px
