@@ -5,8 +5,10 @@ import trudMainStarSky from "@/components/templates/pages/main/blocks/trud-main-
 import trudMainWelcome from "@/components/templates/pages/main/blocks/trud-main-welcome.vue";
 import trudMainAbout from "@/components/templates/pages/main/blocks/trud-main-about.vue";
 import trudMainEcosystem from "@/components/templates/pages/main/blocks/trud-main-ecosystem.vue";
+import trudMainNews from "@/components/templates/pages/main/blocks/trud-main-news.vue";
 import trudMainHowToBuy from "@/components/templates/pages/main/blocks/trud-main-how-to-buy.vue";
 import trudMainSupply from "@/components/templates/pages/main/blocks/trud-main-supply.vue";
+import trudMainRoadmap from "@/components/templates/pages/main/blocks/trud-main-roadmap.vue";
 import trudMainEcoFriendly from "@/components/templates/pages/main/blocks/trud-main-eco-friendly.vue";
 
 export default defineComponent({
@@ -17,15 +19,17 @@ export default defineComponent({
     trudMainWelcome,
     trudMainAbout,
     trudMainEcosystem,
+    trudMainNews,
     trudMainHowToBuy,
     trudMainSupply,
+    trudMainRoadmap,
     trudMainEcoFriendly,
   },
 })
 </script>
 
 <template>
-  <div class="trud-main">
+  <div class="trud-main" id="main">
     <trud-main-star-sky class="star-sky" />
 
     <trud-main-welcome />
@@ -34,9 +38,13 @@ export default defineComponent({
 
     <trud-main-ecosystem />
 
+    <trud-main-news />
+
     <trud-main-how-to-buy />
 
     <trud-main-supply />
+
+    <trud-main-roadmap />
 
     <trud-main-eco-friendly />
   </div>

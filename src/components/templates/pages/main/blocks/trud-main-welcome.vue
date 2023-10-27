@@ -32,7 +32,7 @@ export default defineComponent({
 
 <!--    <img src="/assets/images/logos/trud.png" alt="" class="image">-->
     <div class="image">
-      <trud-coin :color="0x00FF00" :controls="true" :speed="100" />
+      <trud-coin :color="0x00FF00" :mouseFollow="true" :controls="false" :speed="500" />
 
       <div class="green-round"></div>
     </div>
@@ -77,8 +77,8 @@ export default defineComponent({
       @media (min-width: $desktopScreenMinWidth)
         align-items: flex-start
         gap: 10px
-        font-size: 80px
-        line-height: 88px
+        font-size: 65px
+        line-height: 72px
 
       @media (max-width: $mobileScreenMaxWidth)
         align-items: center
@@ -91,8 +91,8 @@ export default defineComponent({
 
       @media (min-width: $desktopScreenMinWidth)
         margin: 64px 0 72px 17px
-        font-size: 36px
-        line-height: 26px
+        font-size: 33px
+        line-height: 22px
 
       @media (max-width: $mobileScreenMaxWidth)
         font-size: 17px
@@ -106,7 +106,7 @@ export default defineComponent({
 
       @media (min-width: $desktopScreenMinWidth)
         padding: 20px 50px
-        max-width: 463px
+        max-width: 386px
 
       @media (max-width: $mobileScreenMaxWidth)
         padding: 13px 50px

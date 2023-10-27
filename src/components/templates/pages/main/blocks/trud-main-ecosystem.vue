@@ -17,12 +17,14 @@ export default defineComponent({
           title: "Historical collection".toUpperCase(),
           description: "NFT collections",
           backgroundImage: "historical_collection.png",
+          link: "https://historicalcollection.art/",
         },
 
         {
           title: "Ordinals mint".toUpperCase(),
           description: "NFT collections",
           backgroundImage: "ordinals_mint.png",
+          link: "https://ordinalsmint.tech/",
         },
 
         {
@@ -59,7 +61,7 @@ export default defineComponent({
           <div class="buttons-group">
             <trud-button class="button" title="INFORMATION" type="transparent" />
 
-            <trud-button class="button" title="GO TO SITE" type="green" />
+            <trud-button class="button" title="GO TO SITE" type="green" :link="block.link" />
           </div>
         </div>
       </div>
@@ -111,7 +113,7 @@ export default defineComponent({
       +background-image-settings()
 
       @media (min-width: $desktopScreenMinWidth)
-        padding: 40px
+        padding: 30px
 
       @media (max-width: $mobileScreenMaxWidth)
         padding: 20px
@@ -175,7 +177,7 @@ export default defineComponent({
                 line-height: 12px
                 padding: 12px 24px
                 width: 100%
-                max-width: 161px
+                max-width: 139px
 
               @media (max-width: $mobileScreenMaxWidth)
                 font-size: 15px

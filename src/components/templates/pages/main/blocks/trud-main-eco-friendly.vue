@@ -2,12 +2,14 @@
 import { defineComponent } from 'vue'
 
 import trudButton from "@/components/UI-kit/button/trud-button.vue";
+import trudCoin from "@/components/UI-kit/coin/trud-coin.vue";
 
 export default defineComponent({
   name: "trud-main-eco-friendly",
 
   components: {
     trudButton,
+    trudCoin,
   },
 })
 </script>
@@ -17,6 +19,8 @@ export default defineComponent({
     <div class="map"></div>
 
     <div class="coin only-ds">
+      <trud-coin :color="0xFFFFFF" :mouseFollow="false" :controls="true" :speed="0" />
+
       <div class="green-round"></div>
     </div>
 
@@ -47,7 +51,7 @@ export default defineComponent({
 <style scoped lang="sass">
 .trud-main-eco-friendly
   display: flex
-  gap: 10px
+  gap: 50px
   align-items: center
   justify-content: center
   position: relative
@@ -78,11 +82,8 @@ export default defineComponent({
     display: flex
     justify-content: center
     align-items: center
-    width: 531px
-    height: 521px
-    +background-image-settings()
-    background-image: url("/public/assets/images/templates/main/eco-friendly/coin.png")
-    pointer-events: none
+    width: 500px
+    aspect-ratio: 1
     position: relative
 
     .green-round

@@ -17,58 +17,52 @@ export default defineComponent({
   },
 
   mounted() {
-    if (window.scrollY > 0) {
-      if (this.isScrolled) {
-        return
-      }
+    window.addEventListener('scroll', this.changeHeader)
 
-      this.isScrolled = true
-    } else {
-      if (!this.isScrolled) {
-        return
-      }
+    this.changeHeader()
+  },
 
-      this.isScrolled = false
-    }
+  beforeUnmount() {
+    window.removeEventListener('scroll', this.changeHeader)
+  },
 
-    window.addEventListener('scroll', () => {
+  methods: {
+    changeHeader() {
       if (window.scrollY > 0) {
         if (this.isScrolled) {
           return
         }
 
+        this.$refs.header.classList.add('active')
         this.isScrolled = true
       } else {
         if (!this.isScrolled) {
           return
         }
 
+        this.$refs.header.classList.remove('active')
         this.isScrolled = false
       }
-    })
+    },
   },
-
-  watch: {
-    isScrolled() {
-      this.$refs.header.classList.toggle('active')
-    }
-  }
 })
 </script>
 
 <template>
   <div class="trud-header" ref="header">
-    <div class="burger only-mb">
-      <div class="line"></div>
+    <div class="burger-wrapper only-mb">
+      <div class="burger">
+        <div class="line"></div>
 
-      <div class="line"></div>
+        <div class="line"></div>
+      </div>
     </div>
 
-    <div class="logo-wrapper">
+    <a class="logo-wrapper" href="#main">
       <div class="logo"></div>
 
       <h1 class="title">TRUD</h1>
-    </div>
+    </a>
 
     <nav class="only-ds">
       <a href="#litepaper"><h4>Litepaper</h4></a>
@@ -100,7 +94,6 @@ export default defineComponent({
   @media (min-width: $desktopScreenMinWidth)
     max-width: calc(1920px - 315px * 2 + 20px * 2)
     align-items: center
-    gap: 50px
     position: fixed
     top: 40px
     z-index: 999
@@ -108,40 +101,50 @@ export default defineComponent({
 
     &.active
       background-color: $green13
-      padding: 16px 40px
-      max-width: calc(1920px - 335px * 2 + 20px * 2)
+      padding: 8px
+      max-width: calc(1920px - 440px * 2 + 20px * 2)
+      top: 14px
 
       .logo-wrapper
-
         > .title
           display: none
 
         .logo
           width: 50px !important
 
+      nav
+        gap: 20px
+
+      .buttons-group
+        column-gap: 15px
+
   @media (max-width: $mobileScreenMaxWidth)
     align-items: flex-start
+    gap: 16px
 
-  .burger
-    display: flex
-    flex-direction: column
-    gap: 7px
-    width: 40px
-    aspect-ratio: 1
-    justify-content: center
-    align-items: center
+  .burger-wrapper
+    width: 100%
 
-    &:hover
-      cursor: pointer
+    .burger
+      display: flex
+      flex-direction: column
+      gap: 7px
+      width: 40px
+      aspect-ratio: 1
+      justify-content: center
+      align-items: center
+
+      &:hover
+        cursor: pointer
+
+        .line
+          background-color: $green7
 
       .line
-        background-color: $green7
-
-    .line
-      height: 5px
-      width: 33px
-      background-color: $green3
-      +border-radius(999px)
+        height: 5px
+        width: 33px
+        background-color: $green3
+        +border-radius(999px)
 
   .logo-wrapper
     display: flex
@@ -161,7 +164,7 @@ export default defineComponent({
       aspect-ratio: 1
 
       @media (min-width: $desktopScreenMinWidth)
-        width: 73px
+        width: 53px
 
       @media (max-width: $mobileScreenMaxWidth)
         width: 30px
@@ -170,8 +173,8 @@ export default defineComponent({
       color: $white1
 
       @media (min-width: $desktopScreenMinWidth)
-        font-size: 50px
-        line-height: 55px
+        font-size: 30px
+        line-height: 33px
 
       @media (max-width: $mobileScreenMaxWidth)
         font-size: 24px
@@ -199,6 +202,7 @@ export default defineComponent({
       flex-direction: column-reverse
       align-items: flex-end
       margin-top: 7.5px
+      width: 100%
 
     .button
       +border-radius(999px)
@@ -207,7 +211,7 @@ export default defineComponent({
         @media (min-width: $desktopScreenMinWidth)
           font-size: 20px
           line-height: 14px
-          padding: 13px 30px 15px
+          padding: 13px 29px 15px
 
         @media (max-width: $mobileScreenMaxWidth)
           font-size: 12px

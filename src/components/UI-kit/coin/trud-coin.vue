@@ -3,16 +3,23 @@ import { defineComponent } from 'vue'
 
 import * as THREE from 'three'
 import {GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader";
-import {Color} from "three";
+import {OrbitControls} from "three/addons/controls/OrbitControls"
 
 export default defineComponent({
   name: "trud-coin",
 
   props: {
     color: {
-      type: Color,
+      type: Number,
       default() {
         return 0x00FF00
+      },
+    },
+
+    mouseFollow: {
+      type: Boolean,
+      default() {
+        return false
       },
     },
 
@@ -75,6 +82,17 @@ export default defineComponent({
     renderer.shadowMap.enabled = false
     renderer.shadowMap.type = THREE.VSMShadowMap
 
+    async function animate() {
+      requestAnimationFrame( animate )
+      await renderer.render(scene, camera)
+    }
+
+    if (this.controls) {
+      const controls = new OrbitControls(camera, renderer.domElement)
+      controls.enableZoom = false
+      controls.update()
+    }
+
     const gltfLoader = new GLTFLoader()
 
     gltfLoader.load("/models/coin2/color.gltf", async gltf => {
@@ -93,26 +111,33 @@ export default defineComponent({
 
       await scene.add(coinScene)
 
-      await this.animate(renderer, scene, camera)
+      await animate(renderer, scene, camera)
 
       coinScene.rotation.x = - Math.PI
 
-      await this.animate(renderer, scene, camera)
+      await animate(renderer, scene, camera)
 
-      let i = (- Math.PI / 360) / 100 * this.speed
+      if (this.speed > 0) {
+        let i = (- Math.PI / 360) / 100 * this.speed
 
-      setInterval(async () => {
-        coinScene.rotateY(i)
-        await this.animate(renderer, scene, camera)
-      }, 20)
+        setInterval(async () => {
+          coinScene.rotateY(i)
+        }, 20)
+      }
 
-      if (this.controls) {
+      if (this.mouseFollow) {
         await window.addEventListener('mousemove', e => {
-          scene.rotation.x = - Math.PI / 4 * ((document.documentElement.clientHeight / 2 - e.clientY) / (document.documentElement.clientHeight / 2))
-          scene.rotation.y = - Math.PI / 4 * ((document.documentElement.clientWidth / 2 - e.clientX) / (document.documentElement.clientWidth / 2))
+          scene.rotation.x = -Math.PI / 4 * ((document.documentElement.clientHeight / 2 - e.clientY) / (document.documentElement.clientHeight / 2))
+          scene.rotation.y = -Math.PI / 4 * ((document.documentElement.clientWidth / 2 - e.clientX) / (document.documentElement.clientWidth / 2))
         })
       }
     })
+
+    // if (this.speed > 0 || this.mouseFollow) {
+    //   setInterval(async () => {
+    //     await animate(renderer, scene, camera)
+    //   }, 20)
+    // }
 
     await window.addEventListener('resize', async () => {
       camera.aspect = 1
@@ -120,20 +145,24 @@ export default defineComponent({
       await camera.updateProjectionMatrix()
     })
 
-    await viewBox.appendChild( renderer.domElement )
-  },
+    viewBox.addEventListener('mouseup', () => {
+      console.log('mouse is up')
+    })
 
-  methods: {
-    async animate(renderer, scene, camera) {
-      await renderer.render(scene, camera)
-    },
+    await viewBox.appendChild( renderer.domElement )
   },
 })
 </script>
 
 <template>
   <div class="trud-coin">
-    <div class="container" ref="threeContainer" ></div>
+    <div
+        class="container"
+        ref="threeContainer"
+        :class="{
+          controls: controls,
+        }"
+    ></div>
   </div>
 </template>
 
@@ -151,4 +180,10 @@ export default defineComponent({
     display: flex
     justify-content: center
     align-items: center
+
+    &.controls
+      cursor: grab
+
+      &:active
+        cursor: grabbing
 </style>

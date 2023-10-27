@@ -4,12 +4,25 @@ import { defineComponent } from 'vue'
 export default defineComponent({
   name: "trud-button",
 
+  data() {
+    return {
+      isButtonClicked: false,
+    }
+  },
+
   props: {
     title: {
       type: String,
       default() {
         return ""
       },
+    },
+
+    link: {
+      type: String,
+      default() {
+        return ""
+      }
     },
 
     type: {
@@ -31,6 +44,28 @@ export default defineComponent({
       return buttonClasses
     },
   },
+
+  methods: {
+    handleButtonClick() {
+      if (this.isButtonClicked) {
+        return
+      }
+
+      if (this.link === "") {
+        this.isButtonClicked = true
+
+        this.$refs.button.classList.add("soon-active")
+
+        setTimeout(() => {
+          this.$refs.button.classList.remove("soon-active")
+
+          this.isButtonClicked = false
+        }, 1000)
+      } else {
+        window.open(this.link, "_blank")
+      }
+    },
+  },
 })
 </script>
 
@@ -38,6 +73,8 @@ export default defineComponent({
   <button
       class="trud-button"
       :class="buttonClasses"
+      @click="handleButtonClick"
+      ref="button"
   >
     <h4 v-html="title" />
   </button>
@@ -50,6 +87,22 @@ export default defineComponent({
   display: flex
   text-align: center
   justify-content: center
+  align-items: center
+  position: relative
+
+  &:after
+    display: none
+    content: "SOON"
+    position: absolute
+    font-family: Manrope, "Calibri Light", sans-serif
+    font-weight: 600
+    animation: left ease-in 1s
+
+  &.soon-active
+    color: transparent !important
+
+    &:after
+      display: block
 
   &:hover
     cursor: pointer
@@ -63,6 +116,9 @@ export default defineComponent({
     background-color: transparent
     color: $green3
 
+    &:after
+      color: $green3
+
     &:hover
       background-color: $green2
 
@@ -70,12 +126,18 @@ export default defineComponent({
     background-color: $green3
     color: $green4
 
+    &:after
+      color: $green4
+
     &:hover
       background-color: $green7
 
   &.darkGreen
     background-color: $green11
     color: $white5
+
+    &:after
+      color: $white5
 
     &:hover
       background-color: $green12

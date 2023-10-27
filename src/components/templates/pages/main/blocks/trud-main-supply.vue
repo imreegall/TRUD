@@ -54,7 +54,7 @@ export default defineComponent({
 <template>
   <div class="trud-main-supply" id="tokenomic">
     <div class="coin-wrapper">
-      <trud-coin :color="0xFFFFFF" :controls="false" :speed="1000" />
+      <trud-coin :color="0xFFFFFF" :mouseFollow="false" :controls="false" :speed="1000" />
     </div>
 
     <h1 class="title">TRUD token was created as an example of a fair
