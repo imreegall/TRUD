@@ -13,7 +13,7 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="trud-main-roadmap">
+  <div class="trud-main-roadmap" id="roadmap">
     <div class="current-season">
       <div class="npc"></div>
 

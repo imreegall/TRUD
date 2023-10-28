@@ -97,13 +97,14 @@ export default defineComponent({
 
   main
     display: flex
-    gap: 20px
     width: 100%
 
     @media (min-width: $desktopScreenMinWidth)
+      gap: 30px
 
     @media (max-width: $mobileScreenMaxWidth)
       flex-direction: column
+      gap: 20px
 
     .block
       display: flex
