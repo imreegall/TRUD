@@ -13,9 +13,9 @@ export default defineComponent({
   data() {
     return {
       instruction: [
-          "You need to have 10,000 TRUD on your wallet to be accepted into the family. You will have access to the professor's room where you will be ",
-          "You need to have 10,000 TRUD on your wallet to be accepted into the family. You will have access to the professor's room where you will be ",
-          "You need to have 10,000 TRUD on your wallet to be accepted into the family. You will have access to the professor's room where you will be able to ldsadasd",
+          "Download and set up a wallet like <a class='link' href='https://metamask.io/download/'>MetaMask</a>. Deposit ETH into it or purchase ETH directly through <a class='link' href='https://metamask.io/download/'>MetaMask</a>.",
+          'Visit <a class="link" href="https://app.uniswap.org/">app.uniswap.org</a> and link your wallet using the top corner option. In the token search bar, enter "TRUD".',
+          "Specify the ETH amount you want to swap for TRUD, and then confirm the transaction within your wallet. Congratulations! You have a TRUD Token!",
       ]
     }
   },

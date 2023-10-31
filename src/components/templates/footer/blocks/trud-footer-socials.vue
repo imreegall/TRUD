@@ -6,7 +6,7 @@ import trudTwitterLogo from "@/components/UI-kit/logos/trud-twitter-logo.vue";
 import trudDiscordLogo from "@/components/UI-kit/logos/trud-discord-logo.vue";
 import trudYoutubeLogo from "@/components/UI-kit/logos/trud-youtube-logo.vue";
 import trudMediumLogo from "@/components/UI-kit/logos/trud-medium-logo.vue";
-import trudTiktokLogo from "@/components/UI-kit/logos/trud-tiktok-logo.vue";
+// import trudTiktokLogo from "@/components/UI-kit/logos/trud-tiktok-logo.vue";
 import trudInstagramLogo from "@/components/UI-kit/logos/trud-instagram-logo.vue";
 
 export default defineComponent({
@@ -18,7 +18,7 @@ export default defineComponent({
     trudDiscordLogo,
     trudYoutubeLogo,
     trudMediumLogo,
-    trudTiktokLogo,
+    // trudTiktokLogo,
     trudInstagramLogo,
   },
 })
@@ -29,13 +29,13 @@ export default defineComponent({
     <h1 class="title">Our socials</h1>
 
     <main>
-      <a class="social" href="https://www.instagram.com/historicalcollection.art/?igshid=YmMyMTA2M2Y%20(https%3A%2F%2Finstagram.com%2Fhistoricalcollection.art%3Figshid%3DYmMyMTA2M2Y%3D)" target="_blank">
+      <a class="social" href="https://instagram.com/historicalcollection.art?igshid=OGQ5ZDc2ODk2ZA==" target="_blank">
         <trud-instagram-logo />
 
         <h1 class="title">INSTAGRAM</h1>
       </a>
 
-      <a class="social" href="https://t.me/historicalcollection" target="_blank">
+      <a class="social" href="https://t.me/TRUDtoken" target="_blank">
         <trud-telegram-logo />
 
         <h1 class="title">TELEGRAM</h1>
@@ -47,7 +47,7 @@ export default defineComponent({
         <h1 class="title">TWITTER</h1>
       </a>
 
-      <a class="social" href="https://discord.gg/historicalcollection" target="_blank">
+      <a class="social" href="https://discord.gg/SFhEuaTT" target="_blank">
         <trud-discord-logo />
 
         <h1 class="title">DISCORD</h1>
@@ -59,17 +59,17 @@ export default defineComponent({
         <h1 class="title">YOUTUBE</h1>
       </a>
 
-      <a class="social" href="https://medium.com/@topyour333/collection-of-3333-nft-about-legendary-historical-people-f71f48ed3eee" target="_blank">
+      <a class="social" href="https://medium.com/@historicalcollectionart" target="_blank">
         <trud-medium-logo />
 
         <h1 class="title">MEDIUM</h1>
       </a>
 
-      <a class="social" href="https://www.tiktok.com/@historical.collection" target="_blank">
-        <trud-tiktok-logo />
+<!--      <a class="social" href="https://www.tiktok.com/@historical.collection" target="_blank">-->
+<!--        <trud-tiktok-logo />-->
 
-        <h1 class="title">TIKTOK</h1>
-      </a>
+<!--        <h1 class="title">TIKTOK</h1>-->
+<!--      </a>-->
     </main>
   </div>
 </template>

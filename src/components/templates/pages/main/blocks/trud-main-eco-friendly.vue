@@ -19,7 +19,7 @@ export default defineComponent({
     <div class="map"></div>
 
     <div class="coin only-ds">
-      <trud-coin :color="0xFFFFFF" :mouseFollow="false" :controls="true" :speed="0" />
+      <trud-coin :color="0xFFFFFF" :mouseFollow="true" :controls="false" :speed="0" :reverse="true" />
 
       <div class="green-round"></div>
     </div>
@@ -67,16 +67,22 @@ export default defineComponent({
   .map
     position: absolute
     +background-image-settings()
-    background-image: url("/public/assets/images/templates/main/eco-friendly/map.png")
-    +opacity(15)
     pointer-events: none
 
     @media (min-width: $desktopScreenMinWidth)
       height: 100%
       max-width: calc(100% - 20px * 2)
       aspect-ratio: calc(1666 / 705)
+      background-image: url("/public/assets/images/templates/main/eco-friendly/map-ds.png")
+      +opacity(15)
 
     @media (max-width: $mobileScreenMaxWidth)
+      position: absolute
+      top: 55px
+      bottom: 0
+      background-image: url("/public/assets/images/templates/main/eco-friendly/map-mb.png")
+      width: 100%
+      background-size: 100% 100%
 
   .coin
     display: flex

@@ -2,14 +2,14 @@
 import { defineComponent } from 'vue'
 
 import trudFooterSocials from "@/components/templates/footer/blocks/trud-footer-socials.vue";
-import trudFooterDocuments from "@/components/templates/footer/blocks/trud-footer-documents.vue";
+// import trudFooterDocuments from "@/components/templates/footer/blocks/trud-footer-documents.vue";
 
 export default defineComponent({
   name: "trud-footer",
 
   components: {
     trudFooterSocials,
-    trudFooterDocuments,
+    // trudFooterDocuments,
   },
 })
 </script>
@@ -18,7 +18,7 @@ export default defineComponent({
   <div class="trud-footer">
     <trud-footer-socials />
 
-    <trud-footer-documents />
+<!--    <trud-footer-documents />-->
 
     <footer>
       <div class="logo-wrapper">

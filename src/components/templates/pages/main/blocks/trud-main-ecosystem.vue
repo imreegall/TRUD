@@ -17,19 +17,17 @@ export default defineComponent({
           title: "Historical collection".toUpperCase(),
           description: "NFT collections",
           backgroundImage: "historical_collection.png",
-          link: "https://historicalcollection.art/",
         },
 
         {
           title: "Ordinals mint".toUpperCase(),
           description: "NFT collections",
           backgroundImage: "ordinals_mint.png",
-          link: "https://ordinalsmint.tech/",
         },
 
         {
-          title: "Historical collection".toUpperCase(),
-          description: "NFT collections",
+          title: "Army of ai-promoter".toUpperCase(),
+          description: "Promote on social networks",
           backgroundImage: "x_bot.png",
         },
       ]
@@ -112,6 +110,7 @@ export default defineComponent({
       width: 100%
       aspect-ratio: 1
       +background-image-settings()
+      +border-radius(20px)
 
       @media (min-width: $desktopScreenMinWidth)
         padding: 30px
@@ -150,6 +149,7 @@ export default defineComponent({
 
           @media (min-width: $desktopScreenMinWidth)
             gap: 20px
+            flex-wrap: wrap
 
           @media (max-width: $mobileScreenMaxWidth)
             gap: 12px

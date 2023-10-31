@@ -76,7 +76,11 @@ export default defineComponent({
       @click="handleButtonClick"
       ref="button"
   >
+    <span class="cover"></span>
+
     <h4 v-html="title" />
+
+    <slot></slot>
   </button>
 </template>
 
@@ -89,6 +93,7 @@ export default defineComponent({
   justify-content: center
   align-items: center
   position: relative
+  overflow: hidden
 
   &:after
     display: none
@@ -97,9 +102,20 @@ export default defineComponent({
     font-family: Manrope, "Calibri Light", sans-serif
     font-weight: 600
     animation: left ease-in 1s
+    z-index: 20
 
   &.soon-active
     color: transparent !important
+
+    .cover
+      display: flex
+      position: absolute
+      top: 0
+      left: 0
+      width: 100%
+      height: 100%
+      background-color: inherit
+      z-index: 10
 
     &:after
       display: block

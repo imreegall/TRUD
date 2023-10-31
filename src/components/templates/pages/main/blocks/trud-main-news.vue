@@ -4,7 +4,7 @@ import { defineComponent } from 'vue'
 import trudButton from "@/components/UI-kit/button/trud-button.vue";
 
 // Import Swiper Vue.js components
-import { Swiper, SwiperSlide } from 'swiper/vue';
+import { Swiper, SwiperSlide, useSwiper } from 'swiper/vue';
 
 // Import Swiper styles
 import 'swiper/css';
@@ -46,50 +46,33 @@ export default defineComponent({
     return {
       news: [
         {
-          img: "new1.png",
-          title: "Record-Breaking NFT Art Sale: Digital Masterpiece Fetches $10 Million!",
-          description: "An astonishing NFT artwork has shattered records, " +
-              "selling for an astounding $10 million! Learn how this milestone " +
-              "was achieved and the lessons it holds for the NFT space",
+          img: "new3.jpg",
+          title: "Liquidity Permanently Locked: TRUD Token Now Available on Uniswap!",
+          description: "We are thrilled to inform our community that TRUD Token is now available for trading on Uniswap! This is...",
+          link: "https://medium.com/@historicalcollectionart/liquidity-permanently-locked-trud-token-now-available-on-uniswap-6318650dd337",
+        },
+
+        {
+          img: "new2.jpg",
+          title: " Acquire the Rarest Ordinals with TRUD Tokens!",
+          description: "Have you ever dreamed of owning something unique from the cryptocurrency world? We have...",
+          link: "https://medium.com/@historicalcollectionart/acquire-the-rarest-ordinals-with-trud-tokens-457df396b168",
         },
 
         {
           img: "new1.png",
-          title: "Record-Breaking NFT Art Sale: Digital Masterpiece Fetches $10 Million!",
-          description: "An astonishing NFT artwork has shattered records, " +
-              "selling for an astounding $10 million! Learn how this milestone " +
-              "was achieved and the lessons it holds for the NFT space",
-        },
-
-        {
-          img: "new1.png",
-          title: "Record-Breaking NFT Art Sale: Digital Masterpiece Fetches $10 Million!",
-          description: "An astonishing NFT artwork has shattered records, " +
-              "selling for an astounding $10 million! Learn how this milestone " +
-              "was achieved and the lessons it holds for the NFT space",
-        },
-
-        {
-          img: "new1.png",
-          title: "Record-Breaking NFT Art Sale: Digital Masterpiece Fetches $10 Million!",
-          description: "An astonishing NFT artwork has shattered records, " +
-              "selling for an astounding $10 million! Learn how this milestone " +
-              "was achieved and the lessons it holds for the NFT space",
-        },
-
-        {
-          img: "new1.png",
-          title: "Record-Breaking",
-          description: "An astonishing NFT artwork has shattered records, " +
-              "selling for an astounding $10 million! Learn how this milestone " +
-              "was achieved and the lessons it holds for the NFT space",
+          title: "Hire an Army of AI Promoters for Your Social Media!",
+          description: "Have you ever dreamed of having your own AI promoter working tirelessly to make your brand.....",
+          link: "https://medium.com/@historicalcollectionart/hire-an-army-of-ai-promoters-for-your-social-media-c8977d3a7f7b",
         },
       ],
+
+      swiperEl: useSwiper(),
     }
   },
 
   mounted() {
-    this.checkNewsBlocks()
+    setTimeout(this.checkNewsBlocks, 500)
 
     window.addEventListener('resize', this.checkNewsBlocks)
   },
@@ -102,11 +85,7 @@ export default defineComponent({
     checkNewsBlocks() {
       let wrapperMaxHeight
 
-      if (document.body.scrollWidth < 1280) {
-        wrapperMaxHeight = 212
-      } else {
-        wrapperMaxHeight = 240
-      }
+      wrapperMaxHeight = 240
 
       const news = document.getElementsByClassName("news-block")
 
@@ -123,6 +102,32 @@ export default defineComponent({
         description.style.webkitLineClamp = Math.floor(freeHeight / lineHeight)
       })
     },
+
+    handleSlideClick(e) {
+      const currentElement = e.currentTarget
+
+      const swiperSlider = e.currentTarget.parentElement
+
+      const swiperPlugin = swiperSlider.parentElement
+
+      const slidesArray = Array.from(swiperSlider.querySelectorAll('.swiper-slide'))
+
+      const indexOfCurrentSlide = slidesArray.indexOf(currentElement)
+
+      const activeSlide = swiperSlider.querySelector('.swiper-slide-active')
+
+      const indexOfActiveSlide = slidesArray.indexOf(activeSlide)
+
+      if (indexOfCurrentSlide <= indexOfActiveSlide) {
+        swiperPlugin.swiper.slidePrev()
+
+        return
+      }
+
+      if (indexOfCurrentSlide > indexOfActiveSlide + 2) {
+        swiperPlugin.swiper.slideNext()
+      }
+    },
   },
 })
 </script>
@@ -134,10 +139,9 @@ export default defineComponent({
     <main>
       <div class="swiper-wrapper">
         <swiper
-            effect="cards"
-            :grabCursor="true"
-            :modules="modules"
+            :slides-per-view="2"
             class="news-wrapper only-mb"
+            :modules="modules"
         >
           <swiper-slide
               class="news-block"
@@ -156,16 +160,17 @@ export default defineComponent({
 
               <h3 class="description news-description" v-html="block.description" />
 
-              <trud-button class="button" title="Marketing" type="transparent" />
+              <trud-button class="button" title="Read" type="transparent" :link="block.link" />
             </div>
           </swiper-slide>
+
+          <swiper-slide />
         </swiper>
 
         <swiper
             :slides-per-view="4"
             :space-between="20"
             class="news-wrapper only-ds"
-            :pagination="pagination"
             :modules="modules"
         >
 
@@ -175,6 +180,7 @@ export default defineComponent({
               class="news-block"
               v-for="(block, index) in news"
               :key="`trud-main-news-new-${ index }`"
+              @click="handleSlideClick"
           >
             <div
                 class="image"
@@ -188,7 +194,7 @@ export default defineComponent({
 
               <h3 class="description news-description" v-html="block.description" />
 
-              <trud-button class="button" title="Marketing" type="transparent" />
+              <trud-button class="button" title="Read" type="transparent" />
             </div>
           </swiper-slide>
 
@@ -223,12 +229,12 @@ export default defineComponent({
   display: flex
   flex-direction: column
   width: 100%
-  padding: 0 20px
 
   @media (min-width: $desktopScreenMinWidth)
     max-width: calc(1920px - 315px * 2 + 20px)
     margin-top: 140px
     gap: 80px
+    padding: 0 20px
 
   @media (max-width: $mobileScreenMaxWidth)
     margin-top: 70px
@@ -254,6 +260,7 @@ export default defineComponent({
     @media (max-width: $mobileScreenMaxWidth)
       width: 100%
       justify-content: center
+      overflow: hidden
 
     .swiper-wrapper
       @media (min-width: $desktopScreenMinWidth)
@@ -263,14 +270,13 @@ export default defineComponent({
 
       @media (max-width: $mobileScreenMaxWidth)
         width: 100%
-        max-width: 280px
 
       .news-wrapper
         @media (min-width: $desktopScreenMinWidth)
           padding-bottom: 50px
 
         @media (max-width: $mobileScreenMaxWidth)
-          width: 100%
+          min-width: calc(200% - 100px)
 
         .news-block
           display: flex
@@ -284,35 +290,34 @@ export default defineComponent({
             align-items: flex-start
             max-height: 280px
             +opacity(50)
+            cursor: pointer
 
             &.swiper-slide-next
               +opacity(100)
+              cursor: default
 
               & + *
                 +opacity(100)
+                cursor: default
 
           @media (max-width: $mobileScreenMaxWidth)
             gap: 20px
             flex-direction: column
-            max-height: 512px
-            width: 280px
-            border: 1px solid $white7
-
-            &.swiper-slide-prev
-              border-color: $white6
-
-            &.swiper-slide-next
-              border-color: $white6
-
-            &.swiper-slide-active
-              border-color: $white4
+            //max-height: 512px
+            max-width: calc(100% /2 - 20px)
+            margin-left: 20px
 
           .image
             +background-image-settings()
-            width: 240px
             aspect-ratio: 1
             +border-radius(20px)
             pointer-events: none
+
+            @media (min-width: $desktopScreenMinWidth)
+              width: 240px
+
+            @media (max-width: $mobileScreenMaxWidth)
+              width: 100%
 
           .about
             display: flex
@@ -326,6 +331,7 @@ export default defineComponent({
 
             @media (max-width: $mobileScreenMaxWidth)
               gap: 20px
+              max-height: 240px
 
             > .title
               line-height: 140%

@@ -27,12 +27,13 @@ export default defineComponent({
 
       <h5 class="description">This is root of TRUD</h5>
 
-      <trud-button class="button" title="BUY TRUD" type="green" />
+      <trud-button class="button" title="BUY TRUD" type="green" link="https://app.uniswap.org/swap?theme=dark&exactField=input&exactAmount=1&inputCurrency=eth&outputCurrency=0x2e7729f4E4AA8E68D13830D372F975046d4a498F" />
     </main>
 
 <!--    <img src="/assets/images/logos/trud.png" alt="" class="image">-->
     <div class="image">
-      <trud-coin :color="0x00FF00" :mouseFollow="true" :controls="false" :speed="500" />
+      <trud-coin class="only-ds" :color="0x00FF00" :mouseFollow="true" :controls="false" :speed="250" />
+      <trud-coin class="only-mb" :color="0x00FF00" :mouseFollow="false" :controls="false" :speed="250" />
 
       <div class="green-round"></div>
     </div>
@@ -53,7 +54,7 @@ export default defineComponent({
     margin-top: 144px
 
   @media (max-width: $mobileScreenMaxWidth)
-    margin-top: 90px
+    margin-top: 63px
     flex-direction: column-reverse
     align-items: center
 
@@ -90,7 +91,8 @@ export default defineComponent({
       color: $white2
 
       @media (min-width: $desktopScreenMinWidth)
-        margin: 64px 0 72px 17px
+        margin-top: 74px
+        margin-bottom: 98px
         font-size: 33px
         line-height: 22px
 
@@ -119,11 +121,10 @@ export default defineComponent({
     position: relative
 
     @media (min-width: $desktopScreenMinWidth)
-      width: 500px
-      margin-right: 80px
+      width: 450px
 
     @media (max-width: $mobileScreenMaxWidth)
-      width: calc(100% * calc((360 - 88 * 2) / 360))
+      width: calc(calc(100% - 68px * 2))
 
     .green-round
       position: absolute

@@ -1,10 +1,21 @@
 <template>
   <div class="trud">
-    <trud-header />
+    <trud-header
+        @showBurgerMenu="status => {
+          isBurgerMenuShown = true
+          closeButtonStatus = status
+        }"
+    />
 
     <trud-main />
 
     <trud-footer />
+
+    <trud-burger-menu
+        v-show="isBurgerMenuShown"
+        :closeButtonStatus="closeButtonStatus"
+        @closeBurgerMenu="isBurgerMenuShown = false"
+    />
   </div>
 </template>
 
@@ -13,13 +24,24 @@ import trudHeader from "@/components/templates/header/trud-header.vue";
 import trudMain from "@/components/templates/pages/main/trud-main.vue";
 import trudFooter from "@/components/templates/footer/trud-footer.vue";
 
+import trudBurgerMenu from "@/components/templates/burger-menu/trud-burger-menu.vue";
+
 export default {
   name: 'App',
+
+  data() {
+    return {
+      isBurgerMenuShown: false,
+      closeButtonStatus: true,
+    }
+  },
 
   components: {
     trudHeader,
     trudMain,
     trudFooter,
+
+    trudBurgerMenu,
   },
 }
 </script>

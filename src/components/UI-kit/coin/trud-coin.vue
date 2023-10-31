@@ -42,6 +42,13 @@ export default defineComponent({
         return 100
       },
     },
+
+    reverse: {
+      type: Boolean,
+      default() {
+        return false
+      },
+    },
   },
 
   async mounted() {
@@ -108,7 +115,10 @@ export default defineComponent({
       gltf.scene.rotateZ(- Math.PI / 60)
 
       await coinScene.add( gltf.scene )
-      await coinScene.rotateY(Math.PI)
+
+      if (!this.reverse) {
+        await coinScene.rotateY(Math.PI)
+      }
 
       await scene.add(coinScene)
 
@@ -124,7 +134,7 @@ export default defineComponent({
         coinScene.rotateY((- Math.PI / 360) / 100 * this.speed / 2)
       }, 10)
     }
-    if (this.mouseFollow) {
+    if (this.mouseFollow && document.body.scrollWidth >= 1280) {
       await window.addEventListener('mousemove', mouseFollow)
     }
 

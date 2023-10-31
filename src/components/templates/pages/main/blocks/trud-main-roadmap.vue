@@ -58,7 +58,7 @@ export default defineComponent({
         </div>
 
         <div class="buttons-group">
-          <trud-button class="button" title="BUY TRUD" type="green" />
+          <trud-button class="button" title="BUY TRUD" type="green" link="https://app.uniswap.org/swap?theme=dark&exactField=input&exactAmount=1&inputCurrency=eth&outputCurrency=0x2e7729f4E4AA8E68D13830D372F975046d4a498F" />
 
           <trud-button class="button" title="GO TO ROOM" type="transparent" />
         </div>

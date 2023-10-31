@@ -51,7 +51,11 @@ export default defineComponent({
     @media (min-width: $desktopScreenMinWidth)
 
     @media (max-width: $mobileScreenMaxWidth)
-      flex-direction: column
+      flex-wrap: wrap
+      width: 280px
+      gap: 20px
+      justify-content: center
+      align-items: center
 
     .document
       color: $green3

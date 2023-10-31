@@ -10,8 +10,27 @@ export default defineComponent({
       default() {
         return "3s"
       },
-    }
-  }
+    },
+
+    size: {
+      type: String,
+      default() {
+        return 'normal'
+      },
+      validator(size) {
+        return ['normal', 'large'].includes(size)
+      },
+    },
+  },
+
+  computed: {
+    buttonClasses() {
+      const buttonClasses = {}
+      buttonClasses[this.size] = true
+
+      return buttonClasses
+    },
+  },
 })
 </script>
 
@@ -22,6 +41,7 @@ export default defineComponent({
         :style="{
           'animation-duration': this.duration,
         }"
+        :class="buttonClasses"
     ></div>
   </div>
 </template>
@@ -31,7 +51,7 @@ export default defineComponent({
   0%
     transform: scale(1)
   50%
-    transform: scale(1.5)
+    transform: scale(2)
   100%
     transform: scale(1)
 
@@ -52,9 +72,19 @@ export default defineComponent({
 
     @media (min-width: $desktopScreenMinWidth)
       filter: blur(2px)
-      width: 100px
+
+      &.normal
+        width: 50px
+
+      &.large
+        width: 75px
 
     @media (max-width: $mobileScreenMaxWidth)
       filter: blur(1px)
-      width: 50px
+
+      &.normal
+        width: 40px
+
+      &.large
+        width: 60px
 </style>

@@ -13,13 +13,28 @@ export default defineComponent({
   data() {
     return {
       tags: [
-          "dextools".toUpperCase(),
-          "etherscan".toUpperCase(),
-          "etherscan".toUpperCase(),
-          "coingesko".toUpperCase(),
+        {
+          title: "dextools".toUpperCase(),
+          link: "",
+        },
+
+        {
+          title: "etherscan".toUpperCase(),
+          link: "https://etherscan.io/token/0x2e7729f4E4AA8E68D13830D372F975046d4a498F",
+        },
+
+        {
+          title: "etherscan".toUpperCase(),
+          link: "https://etherscan.io/token/0x2e7729f4E4AA8E68D13830D372F975046d4a498F",
+        },
+
+        {
+          title: "COINGECKO",
+          link: "",
+        },
       ],
 
-      code: "0sdavasfcasdcas0dsa0d0asfcv0,r,g0,gnb0m.vcc",
+      code: "0x2e7729f4E4AA8E68D13830D372F975046d4a498F",
 
       isCopied: false,
     }
@@ -47,6 +62,14 @@ export default defineComponent({
         this.isCopied = true
       })
     },
+
+    handleTagClick(link) {
+      if (link === "") {
+        return
+      }
+
+      window.open(link, "_blank")
+    },
   }
 })
 </script>
@@ -54,7 +77,9 @@ export default defineComponent({
 <template>
   <div class="trud-main-supply" id="tokenomic">
     <div class="coin-wrapper">
-      <trud-coin :color="0xFFFFFF" :mouseFollow="false" :controls="false" :speed="1000" />
+      <div class="round"></div>
+
+      <trud-coin :color="0xFFFFFF" :mouseFollow="false" :controls="false" :speed="500" />
     </div>
 
     <h1 class="title">TRUD token was created as an example of a fair
@@ -74,7 +99,7 @@ export default defineComponent({
         </div>
 
         <div class="text">
-          <h3>All 100% tokens have been sent to the Uniswap pool, liquidity is blocked in contact for 3 year.</h3>
+          <h3>All 100% tokens have been sent to the Uniswap pool, liquidity is blocked forever. Always TRUD token will be available for buying/selling..</h3>
 
           <br>
 
@@ -91,7 +116,8 @@ export default defineComponent({
             class="tag"
             v-for="(tag, index) in tags"
             :key="`trud-main-supply-tags-tag-${ index }`"
-            v-html="tag"
+            v-html="tag.title"
+            @click="handleTagClick(tag.link)"
         />
       </div>
 
@@ -145,6 +171,9 @@ export default defineComponent({
   .coin-wrapper
     position: absolute
     aspect-ratio: 1
+    display: flex
+    justify-content: center
+    align-items: center
 
     @media (min-width: $desktopScreenMinWidth)
       width: 280px
@@ -153,6 +182,19 @@ export default defineComponent({
     @media (max-width: $mobileScreenMaxWidth)
       width: 120px
       top: -60px
+
+    > .round
+      aspect-ratio: 1
+      background-color: $black
+      position: absolute
+      +border-radius(50%)
+      z-index: -10
+
+      @media (min-width: $desktopScreenMinWidth)
+        width: calc(100% - 10px)
+
+      @media (max-width: $mobileScreenMaxWidth)
+        width: calc(100% - 2px)
 
   > .title
     color: $green4
@@ -239,7 +281,8 @@ export default defineComponent({
       @media (min-width: $desktopScreenMinWidth)
 
       @media (max-width: $mobileScreenMaxWidth)
-        flex-direction: column
+        width: 400px
+        flex-wrap: wrap
 
       .tag
         color: $green4
@@ -248,14 +291,14 @@ export default defineComponent({
         background-color: $wood
         +border-radius(999px)
         text-align: center
+        cursor: pointer
 
         @media (min-width: $desktopScreenMinWidth)
           padding: 12px 24px
 
         @media (max-width: $mobileScreenMaxWidth)
           padding: 12px 16px
-          max-width: 270px
-          width: 100%
+          width: 140px
 
     .copy
       display: flex
