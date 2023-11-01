@@ -20,12 +20,12 @@ export default defineComponent({
   <div class="trud-main-welcome">
     <main>
       <div class="title">
-        <h1>True-Decentralisation</h1>
-
         <h1>True Economics</h1>
+
+        <h1>True Decentralisation</h1>
       </div>
 
-      <h5 class="description">This is root of TRUD</h5>
+      <h5 class="description">This is the root of TRUD</h5>
 
       <trud-button class="button" title="BUY TRUD" type="green" link="https://app.uniswap.org/swap?theme=dark&exactField=input&exactAmount=1&inputCurrency=eth&outputCurrency=0x2e7729f4E4AA8E68D13830D372F975046d4a498F" />
     </main>

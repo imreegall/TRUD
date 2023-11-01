@@ -34,6 +34,20 @@ export default defineComponent({
         return ['transparent', 'green', 'darkGreen'].includes(type)
       },
     },
+
+    showSoon: {
+      type: Boolean,
+      default() {
+        return true
+      },
+    },
+
+    lineHeight: {
+      type: Boolean,
+      default() {
+        return false
+      },
+    },
   },
 
   computed: {
@@ -52,15 +66,17 @@ export default defineComponent({
       }
 
       if (this.link === "") {
-        this.isButtonClicked = true
+        if (this.showSoon) {
+          this.isButtonClicked = true
 
-        this.$refs.button.classList.add("soon-active")
+          this.$refs.button.classList.add("soon-active")
 
-        setTimeout(() => {
-          this.$refs.button.classList.remove("soon-active")
+          setTimeout(() => {
+            this.$refs.button.classList.remove("soon-active")
 
-          this.isButtonClicked = false
-        }, 1000)
+            this.isButtonClicked = false
+          }, 1000)
+        }
       } else {
         window.open(this.link, "_blank")
       }
@@ -78,7 +94,13 @@ export default defineComponent({
   >
     <span class="cover"></span>
 
-    <h4 v-html="title" />
+    <h4
+        v-html="title"
+        class="title"
+        :class="{
+          'hide-overflow': lineHeight,
+        }"
+    />
 
     <slot></slot>
   </button>
@@ -160,4 +182,11 @@ export default defineComponent({
 
   > *
     position: relative
+
+    &.title
+      &.hide-overflow
+        text-overflow: ellipsis
+        overflow: hidden
+        white-space: nowrap
+        line-height: 1
 </style>

@@ -11,6 +11,27 @@ export default defineComponent({
     trudButton,
     trudCoin,
   },
+
+  data() {
+    return {
+      text: [
+          "The Eco-friendly company serves as an entirely self-sufficient, " +
+          "independent, and decentralized entity. " +
+          "It is a living organism comprised of individuals who independently " +
+          "chart a large-scale developmental path where, " +
+          "regardless of circumstances, they will achieve results. " +
+          "Relationships among people are not bound by fixed salaries; " +
+          "instead, individuals independently determine their incomes " +
+          "by contributing their skills and creating products for successful implementation. " +
+          "Everyone plays a role in the system's development, " +
+          "and whether one's contribution is big or small, " +
+          "it matters not, for individuals can step in for one another along the way.",
+
+          "In this, we see the sustainability and longevity of our community, " +
+          "which is growing rapidly and always extends a warm welcome to new members."
+      ]
+    }
+  }
 })
 </script>
 
@@ -28,19 +49,14 @@ export default defineComponent({
       <h1 class="title">Eco-friendly company</h1>
 
       <div class="text">
-        <h3>Eco-friendly company is a completely self-sufficient, independent, decentralized
-          structure. A living organism consisting of people, which independently determines a
-          large-scale development path in which, regardless of the circumstances, the result will
-          be achieved. People's relationships are not cemented by a fixed salary; instead, people
-          independently determine each other's income by creating products and using their
-          skills for successful implementation. Everyone brings their own contribution to the
-          development of the system, big or small, it doesn't matter, people can replace each
-          other along the way.</h3>
+        <template
+            v-for="(paragraph, index) in text"
+            :key="`trud-main-eco-friendly-text-paragraph-${ index }`"
+        >
+          <br v-if="index > 0">
 
-        <br>
-
-        <h3>In this we see the sustainability and longevity of our community, we are growing very
-          quickly and always welcome new members to our Eco-friendly company.</h3>
+          <h3 v-html="paragraph"></h3>
+        </template>
       </div>
 
       <trud-button class="button" title="INTAKE FORM" type="darkGreen" />

@@ -15,19 +15,19 @@ export default defineComponent({
       ecosystem: [
         {
           title: "Historical collection".toUpperCase(),
-          description: "NFT collections",
+          description: "Bitcoin NFT collection",
           backgroundImage: "historical_collection.png",
         },
 
         {
           title: "Ordinals mint".toUpperCase(),
-          description: "NFT collections",
+          description: "Create your Bitcoin NFT",
           backgroundImage: "ordinals_mint.png",
         },
 
         {
           title: "Army of ai-promoter".toUpperCase(),
-          description: "Promote on social networks",
+          description: "Hire your own army",
           backgroundImage: "x_bot.png",
         },
       ]

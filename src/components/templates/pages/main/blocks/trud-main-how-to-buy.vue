@@ -14,7 +14,7 @@ export default defineComponent({
     return {
       instruction: [
           "Download and set up a wallet like <a class='link' href='https://metamask.io/download/'>MetaMask</a>. Deposit ETH into it or purchase ETH directly through <a class='link' href='https://metamask.io/download/'>MetaMask</a>.",
-          'Visit <a class="link" href="https://app.uniswap.org/">app.uniswap.org</a> and link your wallet using the top corner option. In the token search bar, enter "TRUD".',
+          'Visit <a class="link" href="https://app.uniswap.org/swap?theme=dark&exactField=input&exactAmount=1&inputCurrency=eth&outputCurrency=0x2e7729f4E4AA8E68D13830D372F975046d4a498F">app.uniswap.org</a> and link your wallet using the top corner option. In the token search bar, enter "TRUD".',
           "Specify the ETH amount you want to swap for TRUD, and then confirm the transaction within your wallet. Congratulations! You have a TRUD Token!",
       ]
     }
@@ -176,6 +176,7 @@ export default defineComponent({
 
       > .title
         color: $white2
+        text-align: center
 
         @media (min-width: $desktopScreenMinWidth)
           font-size: 24px

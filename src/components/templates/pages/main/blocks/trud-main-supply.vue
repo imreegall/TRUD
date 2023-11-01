@@ -12,6 +12,32 @@ export default defineComponent({
 
   data() {
     return {
+      title: "The TRUD token stands for True Decentralization " +
+          "and has been designed to serve " +
+          "as a model for a fair internal economy. " +
+          "It serves the purposes of voting " +
+          "and settlements within our ecosystem, " +
+          "and all products and services " +
+          "are paid for using this token. " +
+          "Any other income received " +
+          "goes 100% into the liquidity of the TRUD token. " +
+          "Enthusiasts have joined forces to collaborate " +
+          "and are ready to create for you, " +
+          "with the aim of boosting the demand " +
+          "and popularity of this novel economic concept. " +
+          "While the token's price remains at low levels, " +
+          "it's advisable to accumulate them for future purchases.",
+
+      text: [
+          "All 100% tokens has been allocated " +
+          "to the Uniswap liquidity pool and all liquidity " +
+          "is securely locked within the contract.",
+
+          "No presales or airdrops",
+
+          "There are zero token taxes",
+      ],
+
       tags: [
         {
           title: "dextools".toUpperCase(),
@@ -82,13 +108,7 @@ export default defineComponent({
       <trud-coin :color="0xFFFFFF" :mouseFollow="false" :controls="false" :speed="500" />
     </div>
 
-    <h1 class="title">TRUD token was created as an example of a fair
-      domestic economy. It is used for voting and calculations
-      in the ecosystem, it pays for all created products and services.
-      To increase the demand and popularity of the new economic concept,
-      enthusiasts have joined together to work together and are ready
-      to create for you! While the token price is at low values,
-      have time to stock up on them for future purchases!</h1>
+    <h1 class="title" v-html="title"></h1>
 
     <main>
       <div class="about">
@@ -99,15 +119,14 @@ export default defineComponent({
         </div>
 
         <div class="text">
-          <h3>All 100% tokens have been sent to the Uniswap pool, liquidity is blocked forever. Always TRUD token will be available for buying/selling..</h3>
+          <template
+              v-for="(paragraph, index) in text"
+              :key="`trud-main-supply-paragraph-${ index }`"
+          >
+            <br v-if="index">
 
-          <br>
-
-          <h3>No presale, no airdrop</h3>
-
-          <br>
-
-          <h3>Zero token taxes and 0% buy/sell tax on DEX</h3>
+            <h3 v-html="paragraph"></h3>
+          </template>
         </div>
       </div>
 

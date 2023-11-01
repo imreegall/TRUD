@@ -3,12 +3,23 @@ import { defineComponent } from 'vue'
 
 import trudButton from "@/components/UI-kit/button/trud-button.vue";
 
+// import { MetaMaskSDK } from '@metamask/sdk';
+
 export default defineComponent({
   name: "trud-header",
 
   data() {
     return {
       isScrolled: false,
+
+      sdk: null,
+      account: null,
+      chainId: null,
+      connected: false,
+      lastResponse: null,
+      provider: null,
+      availableLanguages: [],
+      selectedLanguage: '',
     }
   },
 
@@ -16,15 +27,60 @@ export default defineComponent({
     trudButton,
   },
 
-  mounted() {
-    window.addEventListener('scroll', this.changeHeader)
-
-    this.changeHeader()
-  },
-
   beforeUnmount() {
     window.removeEventListener('scroll', this.changeHeader)
   },
+
+  async mounted() {
+    window.addEventListener('scroll', this.changeHeader)
+
+    this.changeHeader()
+
+    // Init SDK
+    await this.sdk?.init().then(() => {
+      this.provider = this.sdk?.getProvider();
+
+      // Chain changed
+      this.provider?.on("chainChanged", (chain) => {
+        this.chainId = chain;
+      });
+
+      // Accounts changed
+      this.provider?.on("accountsChanged", (accounts) => {
+        this.account = accounts[0];
+      });
+
+      // Connected event
+      this.provider?.on('connect', () => {
+        this.onConnect();
+        this.connected = true;
+      });
+
+      // Disconnect event
+      this.provider?.on('disconnect', () => {
+        this.connected = false;
+      });
+
+      this.availableLanguages = this.sdk?.availableLanguages ?? ['en']
+    });
+  },
+
+  // created() {
+  //   this.sdk = new MetaMaskSDK({
+  //     dappMetadata: {
+  //       url: window.location.href,
+  //       name: 'TRUD',
+  //     },
+  //     enableDebug: false,
+  //     checkInstallationImmediately: false,
+  //     logging: {
+  //       developerMode: false,
+  //     },
+  //     i18nOptions: {
+  //       enabled: true,
+  //     },
+  //   });
+  // },
 
   methods: {
     changeHeader() {
@@ -48,7 +104,42 @@ export default defineComponent({
     handleBurgerClick(status) {
       this.$emit('show-burger-menu', status)
     },
+
+    async onConnect() {
+      const res = await this.provider.request({
+        method: 'eth_requestAccounts',
+        params: [],
+      });
+
+      this.account = res[0];
+      this.lastResponse = "";
+      this.chainId = this.provider.chainId;
+    },
+
+    async handleConnectButtonClick() {
+      if (this.address) {
+        return
+      }
+
+      await this.onConnect()
+    },
   },
+
+  computed: {
+    address() {
+      if (!this.provider) {
+        return null
+      }
+
+      if (!this.provider.selectedAddress && !this.account) {
+        return null
+      }
+
+      const string = this.provider.selectedAddress || this.account
+
+      return string.slice(0, 4) + '...' + string.substring(string.length - 2)
+    },
+  }
 })
 </script>
 
@@ -91,7 +182,23 @@ export default defineComponent({
     <div class="buttons-group">
       <trud-button class="button" title="Room" type="transparent" />
 
-      <trud-button class="button" title="Connect" type="green">
+      <trud-button
+          v-if="this.address"
+          class="button address"
+          type="green"
+          :title="this.address"
+          :showSoon="false"
+          :line-height="true"
+      />
+
+      <trud-button
+          v-else
+          class="button"
+          title="Connect"
+          type="green"
+          :showSoon="false"
+          @click="handleConnectButtonClick"
+      >
         <div class="icon"></div>
       </trud-button>
     </div>
@@ -175,6 +282,7 @@ export default defineComponent({
 
   .burger-wrapper
     width: 100%
+    z-index: 10
 
     .burger
       display: flex
@@ -259,6 +367,7 @@ export default defineComponent({
       align-items: flex-end
       margin-top: 7.5px
       width: 100%
+      z-index: 10
 
     .button
       +border-radius(999px)
@@ -280,10 +389,19 @@ export default defineComponent({
           line-height: 14px
           padding: 14px 30px 16px
 
+          &.address
+            width: 167px
+            padding: 11px 30px 13px
+
         @media (max-width: $mobileScreenMaxWidth)
           font-size: 12px
           line-height: 9px
           padding: 8px 12px
+
+          &.address
+            max-width: 100px
+            width: 100%
+            padding: 9px 12px
 
         > .icon
           width: 14px

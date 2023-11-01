@@ -9,6 +9,60 @@ export default defineComponent({
   components: {
     trudButton,
   },
+
+  data() {
+    return {
+      seasons: {
+        I: {
+          title: "Season I \"Knot\"",
+          text: [
+            "To become part of our family, you must hold 1 TRUD in your wallet. " +
+            "This grants you access to the professor's chamber, " +
+            "where you can gain insights into the future of the world economy, " +
+            "helping you understand unfolding events and guard against potential errors.",
+
+            "We've enabled Uniswap for your convenience. " +
+            "Exchange 1 TRUD, link your wallet to the website, " +
+            "and new opportunities will unfold in front of you.",
+          ],
+        },
+
+        II: {
+          title: "Season 2 of \"Legends\" opens when the capitalization of TRUD reaches $ 1,000,000!",
+          text: [
+              "It features a historical collection of legendary figures, " +
+              "comprised of 1,000 unique NFT artworks on the Bitcoin blockchain. " +
+              "This is one of the first collections created on Bitcoin and features genuine crypto artifacts. " +
+              "Each Historical NFT is valued at 199000 TRUD, " +
+              "and this launch coincides with the formation of the collectors' club of the same name.",
+          ],
+        },
+
+        III: {
+          title: "Season 3 of \"Book & DAO\" opens with a capitalization of $10.000.000 TRUD!",
+          text: [
+              "This marks the launch of new services, products, and DAO, " +
+              "along with the inauguration of the TRUD millionaires club. " +
+              "The professor will also publish a book.",
+          ],
+        },
+
+        IV: {
+          title: "Season 4 \"Put in\" opens when TRUD capitalization is $100,000,000",
+          text: [
+              "This chapter entails an extensive promotion of the TRUD ecosystem.",
+          ],
+        },
+
+        V: {
+          title: "Season 5<br>\"New Economic concept\"",
+          text: [
+              "When the TRUD token reaches a value of $1, the experiment begins...",
+          ],
+        },
+      }
+    }
+  }
 })
 </script>
 
@@ -37,24 +91,19 @@ export default defineComponent({
               </defs>
             </svg>
 
-            <h1 class="text">“Clot”</h1>
+            <h1 class="text">“Knot”</h1>
           </div>
 
-          <h2 class="text">You need to have 10,000 TRUD on your wallet
-            to be accepted into the family.
-            You will have access to the professor's
-            room where you will be able to learn
-            information about the future of the world
-            economy, insights that will help you understand
-            what is happening and protect
-            you from possible mistakes.
+          <span class="text">
+            <template
+                v-for="(paragraph, index) in seasons.I.text"
+                :key="`trud-main-roadmap-season-I-ds-paragraph-${ index }`"
+            >
+              <br v-if="index">
 
-            <br><br>
-
-            We have enabled Uniswap for your convenience.
-            Exchange 10,000 TRUD, connect your wallet
-            to the site and new opportunities
-            will open up for you!</h2>
+              <h2 v-html="paragraph"></h2>
+            </template>
+          </span>
         </div>
 
         <div class="buttons-group">
@@ -70,24 +119,33 @@ export default defineComponent({
         <div class="line"></div>
 
         <div class="season-2">
-          <h2 class="title">Season 2 of "Legends" opens when the capitalization of TRUD reaches $ 1,000,000!</h2>
+          <h2 class="title" v-html="seasons.II.title"></h2>
 
-          <h3 class="text">A historical collection of legendary personalities from 1000 unique NFT
-            paintings in the Bitcoin blockchain! One of the first collections created on bitcoin
-            and consists of real crypto artifacts! Each Historical NFT is worth 100,000 TRUD.
-            The opening of the collectors club of the same name.
+          <span class="text">
+            <template
+                v-for="(paragraph, index) in seasons.II.text"
+                :key="`trud-main-roadmap-season-II-ds-paragraph-${ index }`"
+            >
+              <br v-if="index">
 
-            <br><br>
-
-            Launching a service for hiring AI promoters. You will be able to hire
-            an army of AI promoters to promote on social networks.
-            1 AI promoter costs only 10,000 TRUD per month!</h3>
+              <h3 v-html="paragraph"></h3>
+            </template>
+          </span>
         </div>
 
         <div class="season-4">
-          <h2 class="title">Season 4 "Put in" opens when TRUD capitalization is $100,000,000</h2>
+          <h2 class="title" v-html="seasons.IV.title"></h2>
 
-          <h2 class="text">Large-scale promotion of the TRUD ecosystem and the professor’s book</h2>
+          <span class="text">
+            <template
+                v-for="(paragraph, index) in seasons.IV.text"
+                :key="`trud-main-roadmap-season-IV-ds-paragraph-${ index }`"
+            >
+              <br v-if="index">
+
+              <h2 v-html="paragraph"></h2>
+            </template>
+          </span>
         </div>
       </div>
 
@@ -136,23 +194,33 @@ export default defineComponent({
 
       <div class="bottom-level">
         <div class="season-3">
-          <h2 class="title">Season 3 of "Book & DAO" opens with a capitalization of $10.000.000 TRUD!</h2>
+          <h2 class="title" v-html="seasons.III.title"></h2>
 
-          <h3 class="text">Launch of new services, products and DAOs. Opening of the TRUD millionaires club.
+          <span class="text">
+            <template
+                v-for="(paragraph, index) in seasons.III.text"
+                :key="`trud-main-roadmap-season-III-ds-paragraph-${ index }`"
+            >
+              <br v-if="index">
 
-            <br><br>
-
-            The professor will publish a book!</h3>
+              <h3 v-html="paragraph"></h3>
+            </template>
+          </span>
         </div>
 
         <div class="season-5">
-          <h2 class="title">Season 5
+          <h2 class="title" v-html="seasons.V.title"></h2>
 
-            <br>
+          <span class="text">
+            <template
+                v-for="(paragraph, index) in seasons.V.text"
+                :key="`trud-main-roadmap-season-V-ds-paragraph-${ index }`"
+            >
+              <br v-if="index">
 
-            “New Economic concept”</h2>
-
-          <h2 class="text">TRUD token reaches $1, the experiment begin...</h2>
+              <h2 v-html="paragraph"></h2>
+            </template>
+          </span>
         </div>
       </div>
     </div>
@@ -190,18 +258,18 @@ export default defineComponent({
         </div>
 
         <div class="block">
-          <h2 class="title">Season 2 of "Legends" opens when the capitalization of TRUD reaches $ 1,000,000!</h2>
+          <h2 class="title" v-html="seasons.II.title"></h2>
 
-          <h3 class="text">A historical collection of legendary personalities from 1000 unique NFT
-            paintings in the Bitcoin blockchain! One of the first collections created on bitcoin
-            and consists of real crypto artifacts! Each Historical NFT is worth 100,000 TRUD.
-            The opening of the collectors club of the same name.
+          <span class="text">
+            <template
+                v-for="(paragraph, index) in seasons.II.text"
+                :key="`trud-main-roadmap-season-II-mb-paragraph-${ index }`"
+            >
+              <br v-if="index">
 
-            <br><br>
-
-            Launching a service for hiring AI promoters. You will be able to hire
-            an army of AI promoters to promote on social networks.
-            1 AI promoter costs only 10,000 TRUD per month!</h3>
+              <h3 v-html="paragraph"></h3>
+            </template>
+          </span>
         </div>
       </div>
 
@@ -222,13 +290,18 @@ export default defineComponent({
         </div>
 
         <div class="block">
-          <h2 class="title">Season 3 of "Book & DAO" opens with a capitalization of $10.000.000 TRUD!</h2>
+          <h2 class="title" v-html="seasons.III.title"></h2>
 
-          <h3 class="text">Launch of new services, products and DAOs. Opening of the TRUD millionaires club.
+          <span class="text">
+            <template
+                v-for="(paragraph, index) in seasons.III.text"
+                :key="`trud-main-roadmap-season-III-ds-paragraph-${ index }`"
+            >
+              <br v-if="index">
 
-            <br><br>
-
-            The professor will publish a book!</h3>
+              <h3 v-html="paragraph"></h3>
+            </template>
+          </span>
         </div>
       </div>
 
@@ -242,9 +315,18 @@ export default defineComponent({
         </div>
 
         <div class="block">
-          <h2 class="title">Season 4 "Put in" opens when TRUD capitalization is $100,000,000</h2>
+          <h2 class="title" v-html="seasons.IV.title"></h2>
 
-          <h2 class="text">Large-scale promotion of the TRUD ecosystem and the professor’s book</h2>
+          <span class="text">
+            <template
+                v-for="(paragraph, index) in seasons.IV.text"
+                :key="`trud-main-roadmap-season-IV-ds-paragraph-${ index }`"
+            >
+              <br v-if="index">
+
+              <h2 v-html="paragraph"></h2>
+            </template>
+          </span>
         </div>
       </div>
 
@@ -258,13 +340,18 @@ export default defineComponent({
         </div>
 
         <div class="block">
-          <h2 class="title">Season 5
+          <h2 class="title" v-html="seasons.V.title"></h2>
 
-            <br>
+          <span class="text">
+            <template
+                v-for="(paragraph, index) in seasons.V.text"
+                :key="`trud-main-roadmap-season-V-ds-paragraph-${ index }`"
+            >
+              <br v-if="index">
 
-            “New Economic concept”</h2>
-
-          <h2 class="text">TRUD token reaches $1, the experiment begin...</h2>
+              <h2 v-html="paragraph"></h2>
+            </template>
+          </span>
         </div>
       </div>
     </div>

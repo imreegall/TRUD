@@ -9,6 +9,32 @@ export default defineComponent({
   components: {
     trudButton,
   },
+
+  data() {
+    return {
+      text: [
+          "Just Try It",
+
+          "The TRUD token is a pioneer in promoting a new economic concept!",
+
+          "Our primary focus is on significant matters, " +
+          "demonstrating by our own example that cryptocurrencies " +
+          "can bring together people from across " +
+          "the globe to achieve grand objectives. " +
+          "It is possible to establish Eco-friendly " +
+          "companies and promote groundbreaking ideas.",
+
+          "We find ourselves in remarkable times, " +
+          "where even the wealthiest monarchs " +
+          "of the past lacked the conveniences " +
+          "and comforts accessible to an average person today. " +
+          "Regrettably, despite the current advancements and progress, " +
+          "these simple luxuries remain out of reach " +
+          "for many due to the limitations " +
+          "of the current global economic system.",
+      ],
+    }
+  },
 })
 </script>
 
@@ -17,29 +43,14 @@ export default defineComponent({
     <h1 class="title">A New Economic Concept</h1>
 
     <main>
-      <h2>The TRUD token is a pioneer of promoting a new economic concept!</h2>
-
-      <h2 class="text-left">The Internet united all people on earth and gave freedom to a new
-        concept, blockchain gave the opportunity to back up this concept
-        with finance, regardless of location, governments and banks.
-        Artificial intelligence has confirmed its loyalty, stability
-        and positive impact on humanity. History has never known
-        better moments to improve the world!</h2>
-
-      <h2 class="text-left">Today's money is information, not a product or a product ...</h2>
-
-      <h2 class="text-left">The only thing that can be created in unlimited
-        volume is money, the number of zeros in your phone...</h2>
-
-      <h2 class="text-left">Bitcoin is an experiment. It was created in order to clearly
-        demonstrate the power of limited
-        emissions, the power of the new economic order...</h2>
-
-      <h2 class="text-left">Bitcoin will grow as long as fiat money is issued indefinitely...</h2>
-
-      <h2 class="text-left">The next experiment is a limited issue of the national
-        currency in a small country. No more inflation or deflation,
-        these are two lies. The truth is in the middle...</h2>
+      <h2
+          v-for="(paragraph, index) in text"
+          :key="`trud-main-about-text-paragraph-${ index }`"
+          v-html="paragraph"
+          :class="{
+            'text-left': index > 1
+          }"
+      ></h2>
     </main>
 
     <trud-button
