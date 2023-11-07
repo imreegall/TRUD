@@ -14,9 +14,6 @@ import 'swiper/css/pagination';
 import 'swiper/css/effect-cards';
 
 // import required modules
-// import { Pagination } from 'swiper/modules';
-
-// import required modules
 import { EffectCards } from 'swiper/modules';
 
 export default defineComponent({
@@ -37,7 +34,6 @@ export default defineComponent({
           return '<div class="' + className + ' pagination-round"></div>';
         },
       },
-      // modules: [Pagination, EffectCards],
       modules: [EffectCards],
     };
   },

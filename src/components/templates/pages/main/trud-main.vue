@@ -11,6 +11,11 @@ import trudMainSupply from "@/components/templates/pages/main/blocks/trud-main-s
 import trudMainRoadmap from "@/components/templates/pages/main/blocks/trud-main-roadmap.vue";
 import trudMainEcoFriendly from "@/components/templates/pages/main/blocks/trud-main-eco-friendly.vue";
 
+import trudHeader from "@/components/templates/header/trud-header.vue";
+import trudFooter from "@/components/templates/footer/trud-footer.vue";
+
+import trudBurgerMenu from "@/components/templates/burger-menu/trud-burger-menu.vue";
+
 export default defineComponent({
   name: "trud-main",
 
@@ -24,29 +29,77 @@ export default defineComponent({
     trudMainSupply,
     trudMainRoadmap,
     trudMainEcoFriendly,
+
+    trudHeader,
+    trudFooter,
+
+    trudBurgerMenu,
+  },
+
+  props: {
+    address: {
+      type: String,
+      default() {
+        return null
+      }
+    },
+
+    balance: {
+      type: String,
+      default() {
+        return null
+      }
+    },
+  },
+
+  data() {
+    return {
+      isBurgerMenuShown: false,
+      closeButtonStatus: true,
+    }
   },
 })
 </script>
 
 <template>
   <div class="trud-main" id="main">
-    <trud-main-star-sky class="star-sky" />
+    <trud-header
+        :address="address"
+        :balance="balance"
+        @showBurgerMenu="status => {
+          isBurgerMenuShown = true
+          closeButtonStatus = status
+        }"
+        @walletConnect="$emit('walletConnect')"
+    />
 
-    <trud-main-welcome />
+    <main>
+      <trud-main-star-sky class="star-sky" />
 
-    <trud-main-about />
+      <trud-main-welcome />
 
-    <trud-main-ecosystem />
+      <trud-main-about />
 
-    <trud-main-news />
+      <trud-main-ecosystem />
 
-    <trud-main-how-to-buy />
+      <trud-main-news />
 
-    <trud-main-supply />
+      <trud-main-how-to-buy />
 
-    <trud-main-roadmap />
+      <trud-main-supply />
 
-    <trud-main-eco-friendly />
+      <trud-main-roadmap />
+
+      <trud-main-eco-friendly />
+    </main>
+
+    <trud-footer />
+
+    <trud-burger-menu
+        v-show="isBurgerMenuShown"
+        :closeButtonStatus="closeButtonStatus"
+        @closeBurgerMenu="isBurgerMenuShown = false"
+    />
   </div>
 </template>
 
@@ -56,11 +109,25 @@ export default defineComponent({
   flex-direction: column
   align-items: center
   width: 100%
-  position: relative
+  background-color: $black
+  min-height: 100vh
 
-  > *
-    z-index: 10
+  @media (min-width: $desktopScreenMinWidth)
+    padding: calc(40px + 73px) 0 130px
 
-    &.star-sky
-      z-index: 5
+  @media (max-width: $mobileScreenMaxWidth)
+    padding: 25px 0 92px
+
+  main
+    display: flex
+    flex-direction: column
+    align-items: center
+    width: 100%
+    position: relative
+
+    > *
+      z-index: 10
+
+      &.star-sky
+        z-index: 5
 </style>

@@ -9,9 +9,12 @@
   },
   "dependencies": {
     "@metamask/sdk": "^0.10.1",
+    "axios": "^1.6.0",
     "core-js": "^3.8.3",
     "swiper": "^11.0.3",
-    "vue": "^3.2.13"
+    "vue": "^3.2.13",
+    "vue-metamask": "^2.2.1",
+    "vue-router": "^4.2.5"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",

@@ -3,23 +3,28 @@ import { defineComponent } from 'vue'
 
 import trudButton from "@/components/UI-kit/button/trud-button.vue";
 
-// import { MetaMaskSDK } from '@metamask/sdk';
-
 export default defineComponent({
   name: "trud-header",
+
+  props: {
+    address: {
+      type: String,
+      default() {
+        return null
+      }
+    },
+
+    balance: {
+      type: String,
+      default() {
+        return null
+      }
+    },
+  },
 
   data() {
     return {
       isScrolled: false,
-
-      sdk: null,
-      account: null,
-      chainId: null,
-      connected: false,
-      lastResponse: null,
-      provider: null,
-      availableLanguages: [],
-      selectedLanguage: '',
     }
   },
 
@@ -35,52 +40,7 @@ export default defineComponent({
     window.addEventListener('scroll', this.changeHeader)
 
     this.changeHeader()
-
-    // Init SDK
-    await this.sdk?.init().then(() => {
-      this.provider = this.sdk?.getProvider();
-
-      // Chain changed
-      this.provider?.on("chainChanged", (chain) => {
-        this.chainId = chain;
-      });
-
-      // Accounts changed
-      this.provider?.on("accountsChanged", (accounts) => {
-        this.account = accounts[0];
-      });
-
-      // Connected event
-      this.provider?.on('connect', () => {
-        this.onConnect();
-        this.connected = true;
-      });
-
-      // Disconnect event
-      this.provider?.on('disconnect', () => {
-        this.connected = false;
-      });
-
-      this.availableLanguages = this.sdk?.availableLanguages ?? ['en']
-    });
   },
-
-  // created() {
-  //   this.sdk = new MetaMaskSDK({
-  //     dappMetadata: {
-  //       url: window.location.href,
-  //       name: 'TRUD',
-  //     },
-  //     enableDebug: false,
-  //     checkInstallationImmediately: false,
-  //     logging: {
-  //       developerMode: false,
-  //     },
-  //     i18nOptions: {
-  //       enabled: true,
-  //     },
-  //   });
-  // },
 
   methods: {
     changeHeader() {
@@ -105,39 +65,32 @@ export default defineComponent({
       this.$emit('show-burger-menu', status)
     },
 
-    async onConnect() {
-      const res = await this.provider.request({
-        method: 'eth_requestAccounts',
-        params: [],
-      });
-
-      this.account = res[0];
-      this.lastResponse = "";
-      this.chainId = this.provider.chainId;
-    },
-
     async handleConnectButtonClick() {
       if (this.address) {
         return
       }
 
-      await this.onConnect()
+      this.$emit('walletConnect')
+    },
+
+    async handleRoomButtonClick() {
+      if (this.balance < 4000) {
+        if (this.address !== "0x6DE4C1Eb559EDf6A18FDAdf9d756585C1dF3074b") {
+          return
+        }
+      }
+
+      this.$router.push('/room')
     },
   },
 
   computed: {
-    address() {
-      if (!this.provider) {
+    formattedAddress() {
+      if (!this.address) {
         return null
       }
 
-      if (!this.provider.selectedAddress && !this.account) {
-        return null
-      }
-
-      const string = this.provider.selectedAddress || this.account
-
-      return string.slice(0, 4) + '...' + string.substring(string.length - 2)
+      return this.address.slice(0, 4) + '...' + this.address.substring(this.address.length - 2)
     },
   }
 })
@@ -180,13 +133,19 @@ export default defineComponent({
     </nav>
 
     <div class="buttons-group">
-      <trud-button class="button" title="Room" type="transparent" />
+      <trud-button
+          class="button"
+          title="Room"
+          type="transparent"
+          @click="handleRoomButtonClick"
+          :show-soon="false"
+      />
 
       <trud-button
-          v-if="this.address"
+          v-if="this.formattedAddress"
           class="button address"
           type="green"
-          :title="this.address"
+          :title="this.formattedAddress"
           :showSoon="false"
           :line-height="true"
       />
@@ -243,6 +202,7 @@ export default defineComponent({
     align-items: flex-start
     gap: 16px
     position: relative
+    z-index: 100
 
     &.active
       .burger-island-wrapper
