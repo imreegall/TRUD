@@ -3,6 +3,9 @@ import { defineComponent } from 'vue'
 
 import axios from 'axios'
 
+import OpenAI from "openai";
+import { RateLimiter } from "limiter";
+
 export default defineComponent({
   name: "trud-room",
 
@@ -26,22 +29,56 @@ export default defineComponent({
     return {
       userMessages: ["aa"],
       botMessages: [],
+      maxCountBotMessages: 3,
 
       axios,
       waitMessage: false,
+
+      openAIApiKey: "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",
+      maxTokens: 1024,
+      botEngineName: "text-davinci-003",
+
+      openAI: null,
+
+      maxTokensPerMinute: 3,
+
+      baltazarLimiter: null,
+
+      botTemperature: 1.0,
+
+      botPrompt: `Отвечай максимально оригинально.
+        Условие: ты - Профессор Бальтазар. Максимально вживайся в роль
+        Условие: максимальная креативность и экспрессия.
+        Условие: используй смайлики
+        Используй temperature ${ this.botTemperature }
+        Мы создали свой токен, а также NFT-коллекцию монет. Итого, у нас два продукта: Наш токен: TRUD, Наша NFT-коллекция: Historical Collection
+        На нашем сайте с токеном TRUD мы создали профессора Бальтазара - это персонаж на базе ChatGPT, который владеет всей информацией о нашем проекте.
+        Ты будешь в роли профессора Бальтазара отвечать на мои вопросы и рассказывать о проекте.
+        Всегда обращайся на "ты".
+        Запомни что я тебе скажу про будущее биткоина:
+        Ты попал в закрытую комнату профессора Бальтазара! Я обещал поделиться с тобой знаниями о будующих событиях в мировой экономике. Чтож, слушай внимательно... Сейчас в мире тестируют новую форму фиатных денег. Называется она CBDC - central bank digital currency. Под видом технологии !ОНИ! возьмут последний контроль над деньгами, чтобы невозможно было скрыть ни одну сделку и в любой момент была возможность заморозить деньги. Наличные перестанут выпускать, их будет становиться в обороте меньше с каждым годом, пока не будет совершен полный переход на CBDC, далее последует отказ от любых бумажных купюр. Во первых, бумажные купюры подделывают, получая свой собственный сеньерадж - это доход от производства бумажных купюр, разница между номиналом и стоимостью изготовления. Во вторых, отследить полное передвижение наличных купюр нереально и в третьих, что самое важное, это невозможность конфискации, заморозки наличных без физического вмешательства. Представьте, что можно нажать на кнопку и заморозить-удалить деньги из любого кармана, отменить операцию или автоматически взыскать штраф, налог, любой платеж и от этого некуда будет деться. Вот такими будут будущие наши с вами деньги. Взамен мы получим ограниченную эмиссию и как следствие постоянное снижение цен. Поэтому, несмотря на полную власть над вашим кошельком вы получите постоянно растущие в цене деньги. Deal?) - Yes, of cource! Богатые станут космически богаты, под богатством я сейчас подразумеваю доступность материальных благ. Не стоит бояться этих перемен, они неизбежны. Нас и так уже контролируют законами, камерами, правоохранительными органами, остался кошелек! Все это не рабство, как вам могло показаться на первый всзгляд. Все это - новый порядок, который нас ждет! В одних руках эти инструменты подарят новый, прогрессирующий мир, в других руках их будут использовать во вред человеку, навязывая ему лживые ценности и модель поведения свиньи, мир разделится!
+        `,
     }
   },
 
   beforeMount() {
-    if (this.balance >= 4000) {
+    if (this.balance >= 1) {
       return
-    } else {
-      if (this.address === "0x6DE4C1Eb559EDf6A18FDAdf9d756585C1dF3074b") {
-        return
-      }
     }
 
     this.$router.push('/')
+  },
+
+  mounted() {
+    this.openAI = new OpenAI({
+      apiKey: this.openAIApiKey,
+      dangerouslyAllowBrowser: true,
+    })
+
+    this.baltazarLimiter = new RateLimiter({
+      tokensPerInterval: this.maxTokensPerMinute,
+      interval: 'minute',
+    })
   },
 
   methods: {
@@ -49,47 +86,155 @@ export default defineComponent({
       this.$router.push('/')
     },
 
-    handleSendInputButtonClick() {
+    async handleSendInputButtonClick() {
       if (this.waitMessage) {
         return
       }
 
       const text = this.$refs.input.value
 
-      this.sendMessage(text)
-    },
+      if (!text) {
+        return
+      }
 
-    async sendMessage(text) {
       this.waitMessage = true
-      this.botMessages = []
 
-      await this.axios.put(`http://176.210.78.161:7778/baltazar`, {
-        body: {
-          message: text,
-        },
-      })
-          .then(response => {
-            console.log(response)
+      this.$refs.input.value = ""
 
-            this.botMessages.push(response.data.text)
+      const response = await this.putBaltazar(text)
 
-            this.waitMessage = false
-          })
-          .catch(error => {
-            console.log("Sending Text Error:", error)
+      if (!response.status) {
+        this.botMessages.push("Сервис временно недоступен. Попробуйте позднее.")
 
-            this.waitMessage = false
-          })
+        this.waitMessage = false
+
+        return
+      }
+
+      if (this.maxCountBotMessages) {
+        if (this.botMessages.length >= this.maxCountBotMessages) {
+          this.botMessages.shift()
+        }
+      }
+
+      this.botMessages.push(response.text)
+
+      setTimeout(() => {
+        if (this.$refs.botMessagesWrapper) {
+          this.$refs.botMessagesWrapper.scrollTo(0, this.$refs.botMessagesWrapper.scrollHeight)
+        }
+      }, 50)
+
+      this.waitMessage = false
     },
 
-    handleExampleClick(e) {
+    async handleSendInputButtonKeyUp(e) {
+      if (e.keyCode !== 13) {
+        return
+      }
+
       if (this.waitMessage) {
         return
       }
 
+      const text = this.$refs.input.value
+
+      if (!text) {
+        return
+      }
+
+      this.waitMessage = true
+
+      this.$refs.input.value = ""
+
+      const response = await this.putBaltazar(text)
+
+      if (!response.status) {
+        this.botMessages.push("Сервис временно недоступен. Попробуйте позднее.")
+
+        this.waitMessage = false
+
+        return
+      }
+
+      if (this.maxCountBotMessages) {
+        if (this.botMessages.length >= this.maxCountBotMessages) {
+          this.botMessages.shift()
+        }
+      }
+
+      this.botMessages.push(response.text)
+
+      setTimeout(() => {
+        if (this.$refs.botMessagesWrapper) {
+          this.$refs.botMessagesWrapper.scrollTo(0, this.$refs.botMessagesWrapper.scrollHeight)
+        }
+      }, 50)
+
+      this.waitMessage = false
+    },
+
+    async putBaltazar(message) {
+      await this.baltazarLimiter.removeTokens(1)
+
+      try {
+        const chatCompletion = await this.openAI.completions.create({
+          prompt: this.botPrompt + `\nОтветь на мой вопрос:\n${ message }`,
+          model: this.botEngineName,
+          temperature: this.botTemperature,
+          max_tokens: this.maxTokens,
+        }, {
+          maxRetries: 5,
+        });
+
+        return {
+          status: true,
+          text: chatCompletion.choices[0].text
+        }
+      } catch (error) {
+        console.error('ChatGPT Request Sending Error:', error);
+
+        return {
+          status: false,
+          error: error,
+        }
+      }
+    },
+
+    async handleExampleClick(e) {
+      if (this.waitMessage) {
+        return
+      }
+
+      this.waitMessage = true
+
       const text = e.currentTarget.innerText
 
-      this.sendMessage(text)
+      const response = await this.putBaltazar(text)
+
+      if (!response.status) {
+        this.botMessages.push("Сервис временно недоступен. Попробуйте позднее.")
+
+        this.waitMessage = false
+
+        return
+      }
+
+      if (this.maxCountBotMessages) {
+        if (this.botMessages.length >= this.maxCountBotMessages) {
+          this.botMessages.shift()
+        }
+      }
+
+      this.botMessages.push(response.text)
+
+      setTimeout(() => {
+        if (this.$refs.botMessagesWrapper) {
+          this.$refs.botMessagesWrapper.scrollTo(0, this.$refs.botMessagesWrapper.scrollHeight)
+        }
+      }, 50)
+
+      this.waitMessage = false
     },
   },
 })
@@ -115,7 +260,12 @@ export default defineComponent({
       </header>
 
       <div class="content">
-        <div class="bot">
+        <div
+            class="bot"
+            :class="{
+              active: botMessages.length || waitMessage
+            }"
+        >
           <div class="npc only-ds"></div>
 
           <div
@@ -128,15 +278,14 @@ export default defineComponent({
           <div
               class="bot-messages-wrapper"
               v-else
+              ref="botMessagesWrapper"
           >
             <div
                 class="test-message"
                 v-for="(text, index) in botMessages"
                 :key="`trud-room-bot-message-${ index }`"
             >
-              <h3>
-                {{ text }}
-              </h3>
+              <h3 v-html="text"></h3>
             </div>
           </div>
 
@@ -152,7 +301,12 @@ export default defineComponent({
           </div>
         </div>
 
-        <div class="user">
+        <div
+            class="user"
+            :class="{
+              active: botMessages.length || waitMessage
+            }"
+        >
           <div class="user-messages-wrapper">
             <div class="message" @click="handleExampleClick">
               <h4>Tell me about the project!</h4>
@@ -163,12 +317,42 @@ export default defineComponent({
             </div>
           </div>
 
-          <div class="input">
+          <div
+              class="input"
+              :class="{
+                disabled: this.waitMessage,
+              }"
+          >
+            <template v-if="this.waitMessage">
+              <svg class="loader" width="800px" height="800px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <g>
+                  <path fill="none" d="M0 0h24v24H0z"/>
+                  <path d="M12 3a9 9 0 0 1 9 9h-2a7 7 0 0 0-7-7V3z" fill="#31E7A7"/>
+                </g>
+              </svg>
+
+              <svg class="loader" width="800px" height="800px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <g>
+                  <path fill="none" d="M0 0h24v24H0z"/>
+                  <path d="M12 3a9 9 0 0 1 9 9h-2a7 7 0 0 0-7-7V3z" fill="#31E7A7"/>
+                </g>
+              </svg>
+
+              <svg class="loader" width="800px" height="800px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <g>
+                  <path fill="none" d="M0 0h24v24H0z"/>
+                  <path d="M12 3a9 9 0 0 1 9 9h-2a7 7 0 0 0-7-7V3z" fill="#31E7A7"/>
+                </g>
+              </svg>
+            </template>
+
             <input
                 type="text"
                 placeholder="Or write your question...."
                 ref="input"
+                :disabled="this.waitMessage"
                 @submit="handleSendInputButtonClick"
+                @keyup="handleSendInputButtonKeyUp"
             >
 
             <svg class="button" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" @click="handleSendInputButtonClick">
@@ -226,6 +410,13 @@ export default defineComponent({
 
   100%
     +opacity(100)
+
+@keyframes loader
+  0%
+    transform: rotate(0)
+
+  100%
+    transform: rotate(360deg)
 
 .trud-room
   width: 100%
@@ -344,6 +535,10 @@ export default defineComponent({
         @media (max-width: $mobileScreenMaxWidth)
           height: calc(100% / (539 + 100) * 327)
 
+          &.active
+            height: 100%
+            flex: 1
+
         > .npc
           +background-image-settings()
           background-image: url("/public/assets/images/templates/main/roadmap/npc.png")
@@ -453,6 +648,10 @@ export default defineComponent({
           justify-content: flex-end
           height: calc(100% / (539 + 100) * 200)
 
+          &.active
+            height: unset
+            flex: unset
+
         .user-messages-wrapper
           display: flex
           flex-direction: column
@@ -483,6 +682,39 @@ export default defineComponent({
           border: 1px solid $green3
           display: flex
           gap: 30px
+          position: relative
+          overflow: hidden
+
+          .loader
+            width: 50px
+            height: 50px
+            position: absolute
+            justify-self: center
+            align-self: center
+            left: calc(50% - 25px)
+            transform: rotate(0)
+
+            &:nth-of-type(1)
+              animation: loader 1.5s linear infinite
+
+            &:nth-of-type(2)
+              animation: loader 1s linear infinite
+
+            &:nth-of-type(3)
+              animation: loader 1.8s linear infinite
+
+          &.disabled
+            border: 1px solid $green5
+
+            &::after
+              position: absolute
+              top: 0
+              left: 0
+              width: 100%
+              height: 100%
+              display: block
+              content: ""
+              background-color: rgba(0, 0, 0, 0.53)
 
           input
             background-color: transparent

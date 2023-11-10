@@ -1,23 +1,19 @@
 <script>
 import { defineComponent } from 'vue'
 
-import axios from 'axios'
+import axios from "axios";
 
-import VueMetamask from 'vue-metamask';
+import { TrustWallet } from "@thirdweb-dev/wallets";
 
 export default defineComponent({
-  name: "trud-meta-mask-connector",
-
-  components: {
-    VueMetamask,
-  },
+  name: "trud-trust-wallet-connector",
 
   props: {
     needConnect: {
       type: Boolean,
       default() {
         return false
-      }
+      },
     },
   },
 
@@ -29,13 +25,19 @@ export default defineComponent({
       balance: null,
 
       wasConnected: false,
+
+      wallet: null,
     }
   },
 
   async beforeMount() {
     const wasConnected = localStorage.getItem('wasConnected')
 
-    this.wasConnected = wasConnected === "MetaMask"
+    this.wasConnected = wasConnected === "TrustWallet"
+  },
+
+  mounted() {
+    this.wallet = new TrustWallet({});
   },
 
   methods: {
@@ -45,30 +47,29 @@ export default defineComponent({
 
     async connect() {
       if (!this.wasConnected) {
-        localStorage.setItem('wasConnected', "MetaMask")
+        localStorage.setItem('wasConnected', "TrustWallet")
       }
 
-      await this.$refs.metamask.init()
-      await this.$refs.metamask.c
+      await this.wallet.connect();
     },
 
-    async onComplete(data) {
-      if (!data) {
-        this.address = null
-        return
-      }
-
-      if (data.type === "NO_LOGIN") {
-        localStorage.removeItem('wasConnected')
-      }
-
-      if (!data.metaMaskAddress) {
-        this.address = null
-        return
-      }
-
-      this.address = data.metaMaskAddress
-    },
+    // async onComplete(data) {
+    //   if (!data) {
+    //     this.address = null
+    //     return
+    //   }
+    //
+    //   if (data.type === "NO_LOGIN") {
+    //     localStorage.removeItem('wasConnected')
+    //   }
+    //
+    //   if (!data.metaMaskAddress) {
+    //     this.address = null
+    //     return
+    //   }
+    //
+    //   this.address = data.metaMaskAddress
+    // },
 
     async getBalance(address) {
       await this.axios.get(`https://api.etherscan.io/api?module=account&action=tokenbalance&contractaddress=0x2e7729f4e4aa8e68d13830d372f975046d4a498f&address=${ address }&tag=latest&apikey=W8VUZ5281MZV536M4FU1Q3GNMHV6P45PCP`)
@@ -119,12 +120,8 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="trud-meta-mask-connector">
-    <vue-metamask
-        ref="metamask"
-        :initConnect="wasConnected"
-        @onComplete="onComplete"
-    />
+  <div class="trud-trust-wallet-connector">
+
   </div>
 </template>
 

@@ -1,10 +1,14 @@
 <script>
 import { defineComponent } from 'vue'
 
-import trudButton from "@/components/UI-kit/button/trud-button.vue";
+import trudButton from "../../../components/UI-kit/button/trud-button.vue";
 
 export default defineComponent({
   name: "trud-header",
+
+  components: {
+    trudButton,
+  },
 
   props: {
     address: {
@@ -26,10 +30,6 @@ export default defineComponent({
     return {
       isScrolled: false,
     }
-  },
-
-  components: {
-    trudButton,
   },
 
   beforeUnmount() {
@@ -66,18 +66,24 @@ export default defineComponent({
     },
 
     async handleConnectButtonClick() {
-      if (this.address) {
-        return
-      }
+      // if (this.address) {
+      //   return
+      // }
 
-      this.$emit('walletConnect')
+      this.$emit('wallet-connect')
     },
 
     async handleRoomButtonClick() {
-      if (this.balance < 4000) {
-        if (this.address !== "0x6DE4C1Eb559EDf6A18FDAdf9d756585C1dF3074b") {
-          return
-        }
+      if (!this.address) {
+        alert("Please, connect wallet")
+
+        return
+      }
+
+      if (this.balance < 1) {
+        alert("You need 1 TRUD")
+
+        return
       }
 
       this.$router.push('/room')
@@ -148,6 +154,7 @@ export default defineComponent({
           :title="this.formattedAddress"
           :showSoon="false"
           :line-height="true"
+          @click="handleConnectButtonClick"
       />
 
       <trud-button

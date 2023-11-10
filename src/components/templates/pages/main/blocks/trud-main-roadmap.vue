@@ -10,6 +10,22 @@ export default defineComponent({
     trudButton,
   },
 
+  props: {
+    address: {
+      type: String,
+      default() {
+        return null
+      }
+    },
+
+    balance: {
+      type: String,
+      default() {
+        return null
+      }
+    },
+  },
+
   data() {
     return {
       seasons: {
@@ -60,9 +76,27 @@ export default defineComponent({
               "When the TRUD token reaches a value of $1, the experiment begins...",
           ],
         },
-      }
+      },
     }
-  }
+  },
+
+  methods: {
+    async handleRoomButtonClick() {
+      if (!this.address) {
+        alert("Please, connect wallet")
+
+        return
+      }
+
+      if (this.balance < 1) {
+        alert("You need 1 TRUD")
+
+        return
+      }
+
+      this.$router.push('/room')
+    },
+  },
 })
 </script>
 
@@ -109,7 +143,7 @@ export default defineComponent({
         <div class="buttons-group">
           <trud-button class="button" title="BUY TRUD" type="green" link="https://app.uniswap.org/swap?theme=dark&exactField=input&exactAmount=1&inputCurrency=eth&outputCurrency=0x2e7729f4E4AA8E68D13830D372F975046d4a498F" />
 
-          <trud-button class="button" title="GO TO ROOM" type="transparent" />
+          <trud-button class="button" title="GO TO ROOM" type="transparent" :show-soon="false" @click="handleRoomButtonClick" />
         </div>
       </main>
     </div>

@@ -58,6 +58,13 @@ export default defineComponent({
       closeButtonStatus: true,
     }
   },
+
+  methods: {
+    walletConnect() {
+      console.log('TEST1')
+      this.$emit('walletConnect')
+    },
+  },
 })
 </script>
 
@@ -66,11 +73,11 @@ export default defineComponent({
     <trud-header
         :address="address"
         :balance="balance"
-        @showBurgerMenu="status => {
+        @show-burger-menu="status => {
           isBurgerMenuShown = true
           closeButtonStatus = status
         }"
-        @walletConnect="$emit('walletConnect')"
+        @wallet-connect="walletConnect"
     />
 
     <main>
@@ -88,7 +95,10 @@ export default defineComponent({
 
       <trud-main-supply />
 
-      <trud-main-roadmap />
+      <trud-main-roadmap
+          :address="address"
+          :balance="balance"
+      />
 
       <trud-main-eco-friendly />
     </main>

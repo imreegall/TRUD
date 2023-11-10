@@ -6,21 +6,27 @@
         @wallet-connect="walletConnect"
     />
 
-    <trud-meta-mask-connector
-        :need-connect="isNeedWalletConnect"
+    <trud-modal-connect-wallet
+        :is-modal-opened="isNeedWalletConnect"
+        @close-modal="isNeedWalletConnect = false"
         @update-data="updateData"
     />
+
+<!--    <trud-meta-mask-connector-->
+<!--        :need-connect="isNeedWalletConnect"-->
+<!--        @update-data="updateData"-->
+<!--    />-->
   </div>
 </template>
 
 <script>
-import trudMetaMaskConnector from "@/components/templates/metaMaskConnector/trud-meta-mask-connector.vue";
+import trudModalConnectWallet from "@/components/templates/modals/walletConnectModal/trud-modal-connect-wallet.vue";
 
 export default {
   name: 'App',
 
   components: {
-    trudMetaMaskConnector,
+    trudModalConnectWallet,
   },
 
   data() {
@@ -37,11 +43,14 @@ export default {
     walletConnect() {
       this.isNeedWalletConnect = false
       this.isNeedWalletConnect = true
+      console.log('TEST2')
     },
 
     updateData(address, balance) {
       this.address = address
       this.balance = balance
+
+      console.log('new Data:', address, balance)
     },
   },
 }

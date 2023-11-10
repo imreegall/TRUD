@@ -13,8 +13,6 @@ export default defineComponent({
   data() {
     return {
       text: [
-          "Just Try It",
-
           "The TRUD token is a pioneer in promoting a new economic concept!",
 
           "Our primary focus is on significant matters, " +
@@ -40,7 +38,7 @@ export default defineComponent({
 
 <template>
   <div class="trud-main-about" id="litepaper">
-    <h1 class="title">A New Economic Concept</h1>
+    <h1 class="title">Just Try It</h1>
 
     <main>
       <h2
@@ -48,7 +46,7 @@ export default defineComponent({
           :key="`trud-main-about-text-paragraph-${ index }`"
           v-html="paragraph"
           :class="{
-            'text-left': index > 1
+            'text-left': index > 0
           }"
       ></h2>
     </main>
