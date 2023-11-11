@@ -17,18 +17,21 @@ export default defineComponent({
           title: "Historical collection".toUpperCase(),
           description: "Bitcoin NFT collection",
           backgroundImage: "historical_collection.png",
+          link: "https://historicalcollection.art/",
         },
 
         {
           title: "Ordinals mint".toUpperCase(),
           description: "Create your Bitcoin NFT",
           backgroundImage: "ordinals_mint.png",
+          link: "https://ordinalsmint.tech/",
         },
 
         {
           title: "Army of ai-promoter".toUpperCase(),
           description: "Hire your own army",
           backgroundImage: "x_bot.png",
+          link: "",
         },
       ]
     }
@@ -57,9 +60,12 @@ export default defineComponent({
           </div>
 
           <div class="buttons-group">
-            <trud-button class="button" title="INFORMATION" type="transparent" />
-
-            <trud-button class="button" title="GO TO SITE" type="green" :link="block.link" />
+            <trud-button
+                class="button"
+                title="Link"
+                type="green"
+                :link="block.link"
+            />
           </div>
         </div>
       </div>
@@ -111,12 +117,27 @@ export default defineComponent({
       aspect-ratio: 1
       +background-image-settings()
       +border-radius(20px)
+      position: relative
 
       @media (min-width: $desktopScreenMinWidth)
         padding: 30px
 
       @media (max-width: $mobileScreenMaxWidth)
         padding: 20px
+
+      &::after
+        position: absolute
+        top: 0
+        left: 0
+        width: 100%
+        height: 100%
+        display: block
+        content: ""
+        background: linear-gradient(0deg, #000 27.14%, rgba(4, 29, 20, 0.00) 78.21%)
+        z-index: 1
+
+      > *
+        z-index: 2
 
       .content
         display: flex
@@ -146,44 +167,23 @@ export default defineComponent({
 
         .buttons-group
           display: flex
-
-          @media (min-width: $desktopScreenMinWidth)
-            gap: 20px
-            flex-wrap: wrap
-
-          @media (max-width: $mobileScreenMaxWidth)
-            gap: 12px
+          justify-content: flex-start
+          width: 100%
 
           .button
             +border-radius(999px)
 
-            &:first-child
-              @media (min-width: $desktopScreenMinWidth)
-                font-size: 17px
-                line-height: 12px
-                padding: 12px 24px
-                width: 100%
-                max-width: 161px
+            @media (min-width: $desktopScreenMinWidth)
+              font-size: 17px
+              line-height: 12px
+              padding: 12px 24px
+              width: 100%
+              max-width: 100px
 
-              @media (max-width: $mobileScreenMaxWidth)
-                font-size: 15px
-                line-height: 11px
-                padding: 10px 16px
-                width: 100%
-                max-width: 132px
-
-            &:last-child
-              @media (min-width: $desktopScreenMinWidth)
-                font-size: 17px
-                line-height: 12px
-                padding: 12px 24px
-                width: 100%
-                max-width: 139px
-
-              @media (max-width: $mobileScreenMaxWidth)
-                font-size: 15px
-                line-height: 11px
-                padding: 10px 16px
-                width: 100%
-                max-width: 112px
+            @media (max-width: $mobileScreenMaxWidth)
+              font-size: 15px
+              line-height: 11px
+              padding: 10px 16px
+              width: 100%
+              max-width: 100px
 </style>

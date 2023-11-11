@@ -60,9 +60,8 @@ export default defineComponent({
   },
 
   methods: {
-    walletConnect() {
-      console.log('TEST1')
-      this.$emit('walletConnect')
+    openWalletConnect() {
+      this.$emit('openWalletConnect')
     },
   },
 })
@@ -77,7 +76,7 @@ export default defineComponent({
           isBurgerMenuShown = true
           closeButtonStatus = status
         }"
-        @wallet-connect="walletConnect"
+        @open-wallet-connect="openWalletConnect"
     />
 
     <main>
@@ -109,6 +108,10 @@ export default defineComponent({
         v-show="isBurgerMenuShown"
         :closeButtonStatus="closeButtonStatus"
         @closeBurgerMenu="isBurgerMenuShown = false"
+
+        :address="address"
+        :balance="balance"
+        @open-wallet-connect="openWalletConnect"
     />
   </div>
 </template>

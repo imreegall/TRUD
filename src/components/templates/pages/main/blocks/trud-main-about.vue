@@ -53,8 +53,10 @@ export default defineComponent({
 
     <trud-button
         class="button"
-        title="READ LITEPAPER"
+        title="READ WHITEPAPER"
         type="green"
+        link="https://samigrella-company.gitbook.io/trud/"
+        :show-soon="false"
     />
   </div>
 </template>

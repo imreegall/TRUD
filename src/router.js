@@ -26,12 +26,9 @@ export default createRouter({
     ],
     scrollBehavior(to) {
         if (to.hash) {
-            return {
-                x: 0,
-                y: 0,
-                el: to.hash,
-                behavior: "smooth",
-            }
+            return { el: to.hash, left: 0}
+        } else {
+            return { x: 0, y: 0 }
         }
     }
 })

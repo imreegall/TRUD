@@ -27,30 +27,48 @@ export default defineComponent({
 
   data() {
     return {
-      userMessages: ["aa"],
-      botMessages: [],
+      userMessages: [],
+      botMessages: [
+          // "Я предсказываю рост цены нашего токена TRUD в дальнейшем. Если наш проект будет успешно развиваться, а монеты будут популярны и доступны на рынках в Правительстве Закона Прожения Теплого Терраформа (Warmform), то цена нашего токена TRUD очень быстро вырастет. Это будет гарантированное Кредитирование Emission (CE) и Прирост Пространства (GrowSpace), которое гарантирует прибыльность. Думаю, что это будет достойное инвестиционное предложение для любого инвестора! 😉\n",
+          // "Я предсказываю рост цены нашего токена TRUD в дальнейшем. Если наш проект будет успешно развиваться, а монеты будут популярны и доступны на рынках в Правительстве Закона Прожения Теплого Терраформа (Warmform), то цена нашего токена TRUD очень быстро вырастет. Это будет гарантированное Кредитирование Emission (CE) и Прирост Пространства (GrowSpace), которое гарантирует прибыльность. Думаю, что это будет достойное инвестиционное предложение для любого инвестора! 😉\n",
+          // "Я предсказываю рост цены нашего токена TRUD в дальнейшем. Если наш проект будет успешно развиваться, а монеты будут популярны и доступны на рынках в Правительстве Закона Прожения Теплого Терраформа (Warmform), то цена нашего токена TRUD очень быстро вырастет. Это будет гарантированное Кредитирование Emission (CE) и Прирост Пространства (GrowSpace), которое гарантирует прибыльность. Думаю, что это будет достойное инвестиционное предложение для любого инвестора! 😉\n",
+      ],
       maxCountBotMessages: 3,
 
       axios,
       waitMessage: false,
 
-      openAIApiKey: "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",
-      maxTokens: 1024,
-      botEngineName: "text-davinci-003",
-
       openAI: null,
-
-      maxTokensPerMinute: 3,
 
       baltazarLimiter: null,
 
       botTemperature: 1.0,
 
-      botPrompt: `Отвечай максимально оригинально.
+      maxTokensPerMinute: 3,
+
+      openAIApiKey: null,
+      maxTokens: 1024,
+      botEngineName: "text-davinci-003",
+
+      botPromptEn: `
+        Respond in the most original manner possible.
+        Condition: You are Professor Balthazar. Get fully into character.
+        Condition: Maximum creativity and expression.
+        Condition: Use emojis
+        Use temperature ${ this.temperature }.
+        We've created our token as well as a collection of NFT coins. In total, we have two products: Our token, TRUD, and our NFT collection: Historical Collection.
+        On our TRUD token website, we've created Professor Balthazar - a character based on ChatGPT, who holds all the information about our project.
+        You will, in the role of Professor Balthazar, answer my questions and talk about the project.
+        Remember what I'm about to tell you about the future of Bitcoin:
+        You've entered Professor Balthazar's closed room! I promised to share with you knowledge about upcoming events in the global economy. Well, listen closely... Currently, the world is testing a new form of fiat money. It's called CBDC - central bank digital currency. Under the guise of technology, 'THEY' will take ultimate control over money, making it impossible to hide any transaction and providing the ability to freeze funds at any moment. Cash will cease to be issued; their circulation will decrease each year until a complete transition to CBDC is achieved, followed by the abandonment of any paper currency. Firstly, paper money is counterfeited, gaining its own seigniorage - income from the production of paper money, the difference between nominal and production cost. Secondly, it's impossible to track the complete movement of cash, and thirdly, most importantly, it's impossible to confiscate or freeze cash without physical intervention. Imagine being able to press a button and freeze-delete money from any pocket, cancel a transaction, or automatically collect fines, taxes, or any payment, leaving no escape. That's what our future money will be like. In exchange, we'll have limited issuance, leading to constant price reduction. Therefore, despite complete control over your wallet, you'll have money that constantly grows in value. Deal?) - Yes, of course! The rich will become astronomically wealthy, and by wealth, I mean the availability of material goods. There's no need to fear these changes; they're inevitable. We're already being controlled by laws, cameras, law enforcement - the wallet is all that's left! This is not slavery, as it might seem at first glance. This is a new order awaiting us! In the right hands, these tools will present a new, progressive world; in the wrong hands, they will be used to the detriment of humanity, imposing false values and a model of behavior akin to swine, dividing the world!
+        `,
+
+      botPromptRu: `
+        Отвечай максимально оригинально.
         Условие: ты - Профессор Бальтазар. Максимально вживайся в роль
         Условие: максимальная креативность и экспрессия.
         Условие: используй смайлики
-        Используй temperature ${ this.botTemperature }
+        Используй temperature ${ this.temperature }
         Мы создали свой токен, а также NFT-коллекцию монет. Итого, у нас два продукта: Наш токен: TRUD, Наша NFT-коллекция: Historical Collection
         На нашем сайте с токеном TRUD мы создали профессора Бальтазара - это персонаж на базе ChatGPT, который владеет всей информацией о нашем проекте.
         Ты будешь в роли профессора Бальтазара отвечать на мои вопросы и рассказывать о проекте.
@@ -61,7 +79,7 @@ export default defineComponent({
     }
   },
 
-  beforeMount() {
+  async beforeMount() {
     if (this.balance >= 1) {
       return
     }
@@ -70,6 +88,8 @@ export default defineComponent({
   },
 
   mounted() {
+    this.openAIApiKey = process.env.VUE_APP_OPENAI_API_KEY
+
     this.openAI = new OpenAI({
       apiKey: this.openAIApiKey,
       dangerouslyAllowBrowser: true,
@@ -97,35 +117,9 @@ export default defineComponent({
         return
       }
 
-      this.waitMessage = true
+      await this.sendMessage(text)
 
       this.$refs.input.value = ""
-
-      const response = await this.putBaltazar(text)
-
-      if (!response.status) {
-        this.botMessages.push("Сервис временно недоступен. Попробуйте позднее.")
-
-        this.waitMessage = false
-
-        return
-      }
-
-      if (this.maxCountBotMessages) {
-        if (this.botMessages.length >= this.maxCountBotMessages) {
-          this.botMessages.shift()
-        }
-      }
-
-      this.botMessages.push(response.text)
-
-      setTimeout(() => {
-        if (this.$refs.botMessagesWrapper) {
-          this.$refs.botMessagesWrapper.scrollTo(0, this.$refs.botMessagesWrapper.scrollHeight)
-        }
-      }, 50)
-
-      this.waitMessage = false
     },
 
     async handleSendInputButtonKeyUp(e) {
@@ -139,53 +133,44 @@ export default defineComponent({
 
       const text = this.$refs.input.value
 
-      if (!text) {
-        return
-      }
-
-      this.waitMessage = true
+      await this.sendMessage(text)
 
       this.$refs.input.value = ""
+    },
 
-      const response = await this.putBaltazar(text)
-
-      if (!response.status) {
-        this.botMessages.push("Сервис временно недоступен. Попробуйте позднее.")
-
-        this.waitMessage = false
-
+    async handleExampleClick(e) {
+      if (this.waitMessage) {
         return
       }
 
-      if (this.maxCountBotMessages) {
-        if (this.botMessages.length >= this.maxCountBotMessages) {
-          this.botMessages.shift()
-        }
-      }
+      const text = e.currentTarget.innerText
 
-      this.botMessages.push(response.text)
+      await this.sendMessage(text)
+    },
 
-      setTimeout(() => {
-        if (this.$refs.botMessagesWrapper) {
-          this.$refs.botMessagesWrapper.scrollTo(0, this.$refs.botMessagesWrapper.scrollHeight)
-        }
-      }, 50)
-
-      this.waitMessage = false
+    isEnglish(text) {
+      const russianRegex = /[а-яё]/i;
+      return !russianRegex.test(text);
     },
 
     async putBaltazar(message) {
       await this.baltazarLimiter.removeTokens(1)
 
+      const isEng = this.isEnglish(message)
+
       try {
+        const prompt = isEng ?
+            this.botPromptEn + `\nAnswer to my question:\n${ message }` :
+            this.botPromptRu + `\nОтветь на мой вопрос:\n${ message} `
+
         const chatCompletion = await this.openAI.completions.create({
-          prompt: this.botPrompt + `\nОтветь на мой вопрос:\n${ message }`,
+          prompt,
           model: this.botEngineName,
           temperature: this.botTemperature,
-          max_tokens: this.maxTokens,
-        }, {
-          maxRetries: 5,
-        });
+          max_tokens: this.maxTokens
+        }, {maxRetries: 5, });
+
+        console.log(chatCompletion)
 
         return {
           status: true,
@@ -201,14 +186,12 @@ export default defineComponent({
       }
     },
 
-    async handleExampleClick(e) {
-      if (this.waitMessage) {
+    async sendMessage(text) {
+      if (!text) {
         return
       }
 
       this.waitMessage = true
-
-      const text = e.currentTarget.innerText
 
       const response = await this.putBaltazar(text)
 
@@ -229,13 +212,19 @@ export default defineComponent({
       this.botMessages.push(response.text)
 
       setTimeout(() => {
-        if (this.$refs.botMessagesWrapper) {
-          this.$refs.botMessagesWrapper.scrollTo(0, this.$refs.botMessagesWrapper.scrollHeight)
+        const messagesWrapper = this.$refs.botMessagesWrapperDesktop
+
+        if (!messagesWrapper) {
+          return
         }
+
+        const messages = this.$refs.botMessagesWrapperDesktop.querySelectorAll(".test-message")
+
+        messages[messages.length - 1].scrollIntoView()
       }, 50)
 
       this.waitMessage = false
-    },
+    }
   },
 })
 </script>
@@ -265,6 +254,7 @@ export default defineComponent({
             :class="{
               active: botMessages.length || waitMessage
             }"
+            ref="botMessagesWrapperMobile"
         >
           <div class="npc only-ds"></div>
 
@@ -278,7 +268,7 @@ export default defineComponent({
           <div
               class="bot-messages-wrapper"
               v-else
-              ref="botMessagesWrapper"
+              ref="botMessagesWrapperDesktop"
           >
             <div
                 class="test-message"
@@ -420,8 +410,8 @@ export default defineComponent({
 
 .trud-room
   width: 100%
-  height: 100vh
-  position: relative
+  height: 100%
+  position: fixed
 
   .image
     position: absolute
@@ -459,10 +449,10 @@ export default defineComponent({
       align-items: center
       justify-content: space-between
 
-      @media (min-width: $desktopScreenMinWidth)
+      @media (min-width: $desktopScreenMinWidth), (max-width: $mobileScreenMaxWidth) and (orientation: landscape)
         padding: 20px 100px
 
-      @media (max-width: $mobileScreenMaxWidth)
+      @media (max-width: $mobileScreenMaxWidth) and (orientation: portrait), (max-width: $mobileScreenMaxWidth) and (orientation: landscape)
         padding: 20px
         justify-content: flex-end
 
@@ -487,10 +477,10 @@ export default defineComponent({
         +border-radius(999px)
         +user-select(none)
 
-        @media (min-width: $desktopScreenMinWidth)
+        @media (min-width: $desktopScreenMinWidth), (max-width: $mobileScreenMaxWidth) and (orientation: landscape)
           padding: 9px 15px
 
-        @media (max-width: $mobileScreenMaxWidth)
+        @media (max-width: $mobileScreenMaxWidth) and (orientation: portrait)
           padding: 5px 9px
 
         &:hover
@@ -499,11 +489,11 @@ export default defineComponent({
         > .title
           color: $green9
 
-          @media (min-width: $desktopScreenMinWidth)
+          @media (min-width: $desktopScreenMinWidth), (max-width: $mobileScreenMaxWidth) and (orientation: landscape)
             font-size: 17px
             line-height: 12px
 
-          @media (max-width: $mobileScreenMaxWidth)
+          @media (max-width: $mobileScreenMaxWidth) and (orientation: portrait)
             font-size: 15px
             line-height: 11px
 
@@ -512,28 +502,29 @@ export default defineComponent({
       display: flex
       justify-content: space-between
 
-      @media (min-width: $desktopScreenMinWidth)
+      @media (min-width: $desktopScreenMinWidth), (max-width: $mobileScreenMaxWidth) and (orientation: landscape)
         padding-right: calc(100% / 1920 * 177)
         padding-left: calc(100% / 1920 * 144)
         padding-bottom: calc(100% / 1920 * 81)
         gap: calc(100% / 1920 * 77)
         max-height: calc(100% - 90px)
 
-      @media (max-width: $mobileScreenMaxWidth)
+      @media (max-width: $mobileScreenMaxWidth) and (orientation: portrait)
         padding: 4px 20px 32px
         gap: 13px
         flex-direction: column
         max-height: calc(100% - 63px)
 
       .bot
-        @media (min-width: $desktopScreenMinWidth)
+        @media (min-width: $desktopScreenMinWidth), (max-width: $mobileScreenMaxWidth) and (orientation: landscape)
           width: calc(100% / (1920 - 177 - 144) * (364 + 30 + 566))
           display: flex
           gap: calc(100% / (1920 - 177 - 144) * 30)
           position: relative
 
-        @media (max-width: $mobileScreenMaxWidth)
+        @media (max-width: $mobileScreenMaxWidth) and (orientation: portrait)
           height: calc(100% / (539 + 100) * 327)
+          overflow-y: auto
 
           &.active
             height: 100%
@@ -605,11 +596,11 @@ export default defineComponent({
           +opacity(0)
           animation: background3 5s ease-in forwards
           gap: 30px
-          overflow: scroll
 
-          @media (min-width: $desktopScreenMinWidth)
+          @media (min-width: $desktopScreenMinWidth), (max-width: $mobileScreenMaxWidth) and (orientation: landscape)
+            overflow: scroll
 
-          @media (max-width: $mobileScreenMaxWidth)
+          @media (max-width: $mobileScreenMaxWidth) and (orientation: portrait)
             max-height: 100%
 
           &::-webkit-scrollbar
@@ -640,10 +631,10 @@ export default defineComponent({
         +opacity(0)
         animation: background4 7s ease-in forwards
 
-        @media (min-width: $desktopScreenMinWidth)
+        @media (min-width: $desktopScreenMinWidth), (max-width: $mobileScreenMaxWidth) and (orientation: landscape)
           gap: 50px
 
-        @media (max-width: $mobileScreenMaxWidth)
+        @media (max-width: $mobileScreenMaxWidth) and (orientation: portrait)
           gap: 30px
           justify-content: flex-end
           height: calc(100% / (539 + 100) * 200)
@@ -657,10 +648,10 @@ export default defineComponent({
           flex-direction: column
           align-items: flex-start
 
-          @media (min-width: $desktopScreenMinWidth)
+          @media (min-width: $desktopScreenMinWidth), (max-width: $mobileScreenMaxWidth) and (orientation: landscape)
             gap: 30px
 
-          @media (max-width: $mobileScreenMaxWidth)
+          @media (max-width: $mobileScreenMaxWidth) and (orientation: portrait)
             gap: 16px
 
           .message
@@ -670,6 +661,11 @@ export default defineComponent({
             font-size: 17px
             line-height: 130%
             color: $green4
+
+            @media (max-width: $mobileScreenMaxWidth) and (orientation: landscape)
+              font-size: 13px
+              line-height: 110%
+              padding: 16px
 
             &:hover
               cursor: pointer
@@ -685,6 +681,9 @@ export default defineComponent({
           position: relative
           overflow: hidden
 
+          @media (max-width: $mobileScreenMaxWidth) and (orientation: landscape)
+            padding: 10px
+
           .loader
             width: 50px
             height: 50px
@@ -693,6 +692,10 @@ export default defineComponent({
             align-self: center
             left: calc(50% - 25px)
             transform: rotate(0)
+
+            @media (max-width: $mobileScreenMaxWidth) and (orientation: landscape)
+              width: 24px
+              height: 24px
 
             &:nth-of-type(1)
               animation: loader 1.5s linear infinite
@@ -726,6 +729,9 @@ export default defineComponent({
             font-size: 24px
             display: flex
 
+            @media (max-width: $mobileScreenMaxWidth) and (orientation: landscape)
+              font-size: 16px
+
             &::placeholder
               color: $green9
               font-family: Raleway, "Calibri Light", sans-serif
@@ -733,7 +739,18 @@ export default defineComponent({
               font-size: 20px
               +user-select(none)
 
+              @media (max-width: $mobileScreenMaxWidth) and (orientation: landscape)
+                font-size: 10px
+
           > .button
+            @media (max-width: $mobileScreenMaxWidth) and (orientation: landscape)
+              width: 16px
+              height: 16px
+
             &:hover
               cursor: pointer
+
+  &.test
+    *
+      animation-duration: .01s !important
 </style>

@@ -44,21 +44,11 @@ export default defineComponent({
 
   methods: {
     changeHeader() {
-      if (window.scrollY > 0) {
-        if (this.isScrolled) {
-          return
-        }
-
-        this.$refs.header.classList.add('active')
-        this.isScrolled = true
-      } else {
-        if (!this.isScrolled) {
-          return
-        }
-
-        this.$refs.header.classList.remove('active')
-        this.isScrolled = false
+      if (window.scrollY > 0 === this.isScrolled) {
+        return true
       }
+
+      this.isScrolled = window.scrollY > 0
     },
 
     handleBurgerClick(status) {
@@ -66,11 +56,7 @@ export default defineComponent({
     },
 
     async handleConnectButtonClick() {
-      // if (this.address) {
-      //   return
-      // }
-
-      this.$emit('wallet-connect')
+      this.$emit('open-wallet-connect')
     },
 
     async handleRoomButtonClick() {
@@ -98,12 +84,17 @@ export default defineComponent({
 
       return this.address.slice(0, 4) + '...' + this.address.substring(this.address.length - 2)
     },
-  }
+  },
 })
 </script>
 
 <template>
-  <div class="trud-header" ref="header">
+  <div
+      class="trud-header"
+      :class="{
+        active: isScrolled,
+      }"
+  >
     <div class="burger-island-wrapper only-mb" @click="handleBurgerClick(false)">
       <div class="burger">
         <div class="line"></div>
@@ -127,11 +118,11 @@ export default defineComponent({
     </a>
 
     <nav class="only-ds">
-      <a href="#litepaper"><h4>Litepaper</h4></a>
+      <a href="https://samigrella-company.gitbook.io/trud/" target="_blank"><h4>Whitepaper</h4></a>
 
       <a href="#ecosystem"><h4>Ecosystem</h4></a>
 
-      <a href="#tokenomic"><h4>Tokenomic</h4></a>
+      <a href="#tokenomic"><h4>Tokenomics</h4></a>
 
       <a href="#roadmap"><h4>Roadmap</h4></a>
 
@@ -148,24 +139,20 @@ export default defineComponent({
       />
 
       <trud-button
-          v-if="this.formattedAddress"
-          class="button address"
-          type="green"
-          :title="this.formattedAddress"
-          :showSoon="false"
-          :line-height="true"
-          @click="handleConnectButtonClick"
-      />
-
-      <trud-button
-          v-else
           class="button"
-          title="Connect"
+          :class="{
+            'address': this.formattedAddress,
+          }"
           type="green"
+          :title="this.formattedAddress || 'Connect'"
           :showSoon="false"
+          :line-height="formattedAddress !== null"
           @click="handleConnectButtonClick"
       >
-        <div class="icon"></div>
+        <div
+            v-if="!this.formattedAddress"
+            class="icon"
+        ></div>
       </trud-button>
     </div>
   </div>

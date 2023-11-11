@@ -17,6 +17,20 @@ export default defineComponent({
         return false
       }
     },
+
+    address: {
+      type: String,
+      default() {
+        return null
+      }
+    },
+
+    balance: {
+      type: String,
+      default() {
+        return null
+      }
+    },
   },
 
   methods: {
@@ -26,6 +40,37 @@ export default defineComponent({
 
     handleCloseButtonClick() {
       this.$emit('close-burger-menu')
+    },
+
+    async handleConnectButtonClick() {
+      await this.$emit('close-burger-menu')
+      this.$emit('open-wallet-connect')
+    },
+
+    async handleRoomButtonClick() {
+      if (!this.address) {
+        alert("Please, connect wallet")
+
+        return
+      }
+
+      if (this.balance < 1) {
+        alert("You need 1 TRUD")
+
+        return
+      }
+
+      this.$router.push('/room')
+    },
+  },
+
+  computed: {
+    formattedAddress() {
+      if (!this.address) {
+        return null
+      }
+
+      return this.address.slice(0, 4) + '...' + this.address.substring(this.address.length - 2)
     },
   },
 })
@@ -56,11 +101,11 @@ export default defineComponent({
     </svg>
 
     <nav>
-      <a href="#litepaper" @click="handleLinkClick"><h4>Litepaper</h4></a>
+      <a href="https://samigrella-company.gitbook.io/trud/" @click="handleLinkClick" target="_blank"><h4>Whitepaper</h4></a>
 
       <a href="#ecosystem" @click="handleLinkClick"><h4>Ecosystem</h4></a>
 
-      <a href="#tokenomic" @click="handleLinkClick"><h4>Tokenomic</h4></a>
+      <a href="#tokenomic" @click="handleLinkClick"><h4>Tokenomics</h4></a>
 
       <a href="#roadmap" @click="handleLinkClick"><h4>Roadmap</h4></a>
 
@@ -68,9 +113,25 @@ export default defineComponent({
     </nav>
 
     <div class="buttons-group">
-      <trud-button class="button" title="Connect wallet" type="green" />
+      <trud-button
+          class="button"
+          :class="{
+            'address': this.formattedAddress,
+          }"
+          type="green"
+          :title="this.formattedAddress || 'Connect wallet'"
+          :showSoon="false"
+          :line-height="formattedAddress !== null"
+          @click="handleConnectButtonClick"
+      />
 
-      <trud-button class="button" title="Room" type="transparent" />
+      <trud-button
+          class="button"
+          title="Room"
+          type="transparent"
+          @click="handleRoomButtonClick"
+          :show-soon="false"
+      />
     </div>
   </div>
 </template>

@@ -130,74 +130,86 @@ export default defineComponent({
 
 <template>
   <div class="trud-main-news">
-    <h1 class="title">News</h1>
+    <div class="wrapper">
+      <h1 class="title">News</h1>
 
-    <main>
-      <div class="swiper-wrapper">
-        <swiper
-            :slides-per-view="2"
-            class="news-wrapper only-mb"
-            :modules="modules"
-        >
-          <swiper-slide
-              class="news-block"
-              v-for="(block, index) in news"
-              :key="`trud-main-news-new-${ index }`"
+      <main>
+        <div class="swiper-wrapper">
+          <swiper
+              :slides-per-view="2"
+              class="news-wrapper only-mb"
+              :modules="modules"
           >
-            <div
-                class="image"
-                :style="{
+            <swiper-slide
+                class="news-block"
+                v-for="(block, index) in news"
+                :key="`trud-main-news-new-${ index }`"
+            >
+              <div
+                  class="image"
+                  :style="{
                 'background-image': `url(/assets/images/templates/main/news/${ block.img })`,
               }"
-            ></div>
+              ></div>
 
-            <div class="about">
-              <h1 class="title" v-html="block.title" />
+              <div class="about">
+                <h1 class="title" v-html="block.title" />
 
-              <h3 class="description news-description" v-html="block.description" />
+                <h3 class="description news-description" v-html="block.description" />
 
-              <trud-button class="button" title="Read" type="transparent" :link="block.link" />
-            </div>
-          </swiper-slide>
+                <trud-button
+                    class="button"
+                    title="Read"
+                    type="transparent"
+                    :link="block.link"
+                />
+              </div>
+            </swiper-slide>
 
-          <swiper-slide />
-        </swiper>
+            <swiper-slide />
+          </swiper>
 
-        <swiper
-            :slides-per-view="4"
-            :space-between="20"
-            class="news-wrapper only-ds"
-            :modules="modules"
-        >
-
-          <swiper-slide />
-
-          <swiper-slide
-              class="news-block"
-              v-for="(block, index) in news"
-              :key="`trud-main-news-new-${ index }`"
-              @click="handleSlideClick"
+          <swiper
+              :slides-per-view="4"
+              :space-between="20"
+              class="news-wrapper only-ds"
+              :modules="modules"
           >
-            <div
-                class="image"
-                :style="{
+
+            <swiper-slide />
+
+            <swiper-slide
+                class="news-block"
+                v-for="(block, index) in news"
+                :key="`trud-main-news-new-${ index }`"
+                @click="handleSlideClick"
+            >
+              <div
+                  class="image"
+                  :style="{
                 'background-image': `url(/assets/images/templates/main/news/${ block.img })`,
               }"
-            ></div>
+              ></div>
 
-            <div class="about">
-              <h1 class="title" v-html="block.title" />
+              <div class="about">
+                <h1 class="title" v-html="block.title" />
 
-              <h3 class="description news-description" v-html="block.description" />
+                <h3 class="description news-description" v-html="block.description" />
 
-              <trud-button class="button" title="Read" type="transparent" />
-            </div>
-          </swiper-slide>
+                <trud-button
+                    class="button"
+                    title="Read"
+                    type="transparent"
+                    :link="block.link"
+                />
+              </div>
+            </swiper-slide>
 
-          <swiper-slide />
-        </swiper>
-      </div>
-    </main>
+            <swiper-slide />
+          </swiper>
+        </div>
+      </main>
+    </div>
   </div>
 </template>
 
@@ -222,136 +234,142 @@ export default defineComponent({
 
 <style scoped lang="sass">
 .trud-main-news
-  display: flex
-  flex-direction: column
   width: 100%
+  display: flex
+  justify-content: center
+  overflow: hidden
 
-  @media (min-width: $desktopScreenMinWidth)
-    max-width: calc(1920px - 315px * 2 + 20px)
-    margin-top: 140px
-    gap: 80px
-    padding: 0 20px
-
-  @media (max-width: $mobileScreenMaxWidth)
-    margin-top: 70px
-    gap: 40px
-
-  > .title
-    color: $white4
-
-    @media (min-width: $desktopScreenMinWidth)
-      font-size: 36px
-      line-height: 26px
-
-    @media (max-width: $mobileScreenMaxWidth)
-      font-size: 24px
-      line-height: 17px
-      text-align: center
-
-  main
+  .wrapper
     display: flex
+    flex-direction: column
+    width: 100%
 
     @media (min-width: $desktopScreenMinWidth)
+      max-width: calc(1920px - 315px * 2 + 20px)
+      margin-top: 140px
+      gap: 80px
+      padding: 0 20px
 
     @media (max-width: $mobileScreenMaxWidth)
-      width: 100%
-      justify-content: center
-      overflow: hidden
+      margin-top: 70px
+      gap: 40px
 
-    .swiper-wrapper
+    > .title
+      color: $white4
+
       @media (min-width: $desktopScreenMinWidth)
-        width: calc(567px * 4 + 20px * 3)
-        position: relative
-        left: calc(-567px - 20px)
+        font-size: 36px
+        line-height: 26px
+
+      @media (max-width: $mobileScreenMaxWidth)
+        font-size: 24px
+        line-height: 17px
+        text-align: center
+
+    main
+      display: flex
+
+      @media (min-width: $desktopScreenMinWidth)
 
       @media (max-width: $mobileScreenMaxWidth)
         width: 100%
+        justify-content: center
+        overflow: hidden
 
-      .news-wrapper
+      .swiper-wrapper
         @media (min-width: $desktopScreenMinWidth)
-          padding-bottom: 50px
+          width: calc(567px * 4 + 20px * 3)
+          position: relative
+          left: calc(-567px - 20px)
 
         @media (max-width: $mobileScreenMaxWidth)
-          min-width: calc(200% - 100px)
+          width: 100%
 
-        .news-block
-          display: flex
-          padding: 20px
-          +border-radius(40px)
-          background-color: $green6
-
+        .news-wrapper
           @media (min-width: $desktopScreenMinWidth)
-            gap: 30px
-            width: 567px
-            align-items: flex-start
-            max-height: 280px
-            +opacity(50)
-            cursor: pointer
+            padding-bottom: 50px
 
-            &.swiper-slide-next
-              +opacity(100)
-              cursor: default
+          @media (max-width: $mobileScreenMaxWidth)
+            min-width: calc(200% - 100px)
 
-              & + *
+          .news-block
+            display: flex
+            padding: 20px
+            +border-radius(40px)
+            background-color: $green6
+
+            @media (min-width: $desktopScreenMinWidth)
+              gap: 30px
+              width: 567px
+              align-items: flex-start
+              max-height: 280px
+              +opacity(50)
+              cursor: pointer
+
+              &.swiper-slide-next
                 +opacity(100)
                 cursor: default
 
-          @media (max-width: $mobileScreenMaxWidth)
-            gap: 20px
-            flex-direction: column
-            //max-height: 512px
-            max-width: calc(100% /2 - 20px)
-            margin-left: 20px
-
-          .image
-            +background-image-settings()
-            aspect-ratio: 1
-            +border-radius(20px)
-            pointer-events: none
-
-            @media (min-width: $desktopScreenMinWidth)
-              width: 240px
-
-            @media (max-width: $mobileScreenMaxWidth)
-              width: 100%
-
-          .about
-            display: flex
-            flex-direction: column
-            align-items: flex-start
-            justify-content: space-between
-            height: 100%
-            flex: 1
-
-            @media (min-width: $desktopScreenMinWidth)
+                & + *
+                  +opacity(100)
+                  cursor: default
 
             @media (max-width: $mobileScreenMaxWidth)
               gap: 20px
-              max-height: 240px
+              flex-direction: column
+              //max-height: 512px
+              max-width: calc(100% /2 - 20px)
+              margin-left: 20px
 
-            > .title
-              line-height: 140%
-              font-size: 20px
-              color: $white2
-
-            .description
-              line-height: 140%
-              font-size: 17px
-              color: $green14
-              display: -webkit-box
-              //-webkit-line-clamp: 3
-              -webkit-box-orient: vertical
-              overflow: hidden
-
-            .button
-              padding: 11px 23px
-              +border-radius(999px)
+            .image
+              +background-image-settings()
+              aspect-ratio: 1
+              +border-radius(20px)
+              pointer-events: none
 
               @media (min-width: $desktopScreenMinWidth)
-                font-size: 17px
-                line-height: 12px
+                width: 240px
 
               @media (max-width: $mobileScreenMaxWidth)
-                font-size: 15px
-                line-height: 11px
+                width: 100%
+
+            .about
+              display: flex
+              flex-direction: column
+              align-items: flex-start
+              justify-content: space-between
+              height: 100%
+              flex: 1
+
+              @media (min-width: $desktopScreenMinWidth)
+
+              @media (max-width: $mobileScreenMaxWidth)
+                gap: 20px
+                max-height: 240px
+
+              > .title
+                line-height: 140%
+                font-size: 20px
+                color: $white2
+
+              .description
+                line-height: 140%
+                font-size: 17px
+                color: $green14
+                display: -webkit-box
+                //-webkit-line-clamp: 3
+                -webkit-box-orient: vertical
+                overflow: hidden
+
+              .button
+                padding: 11px 23px
+                +border-radius(999px)
+
+                @media (min-width: $desktopScreenMinWidth)
+                  font-size: 17px
+                  line-height: 12px
+
+                @media (max-width: $mobileScreenMaxWidth)
+                  font-size: 15px
+                  line-height: 11px
 </style>

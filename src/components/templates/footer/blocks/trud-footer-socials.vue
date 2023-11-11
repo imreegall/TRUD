@@ -41,13 +41,13 @@ export default defineComponent({
         <h1 class="title">TELEGRAM</h1>
       </a>
 
-      <a class="social" href="https://twitter.com/ordinalslegends" target="_blank">
+      <a class="social" href="https://x.com/trudtoken" target="_blank">
         <trud-twitter-logo />
 
         <h1 class="title">TWITTER</h1>
       </a>
 
-      <a class="social" href="https://discord.gg/SFhEuaTT" target="_blank">
+      <a class="social" href="https://discord.gg/historicalcollection" target="_blank">
         <trud-discord-logo />
 
         <h1 class="title">DISCORD</h1>

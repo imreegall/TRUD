@@ -398,6 +398,7 @@ export default defineComponent({
   display: flex
   flex-direction: column
   align-items: center
+  overflow: hidden
 
   @media (min-width: $desktopScreenMinWidth)
     padding: 0 20px

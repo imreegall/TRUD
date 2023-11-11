@@ -72,8 +72,6 @@ export default defineComponent({
         return
       }
 
-      this.isCopied = true
-
       navigator.clipboard.writeText(this.code).then(() => {
         const button = this.$refs.copyButton
 
@@ -84,9 +82,9 @@ export default defineComponent({
 
           this.isCopied = false
         }, 2000)
-      }).catch(() => {
-        this.isCopied = true
       })
+
+      this.isCopied = true
     },
 
     handleTagClick(link) {
