@@ -56,12 +56,27 @@ export default defineComponent({
     return {
       isBurgerMenuShown: false,
       closeButtonStatus: true,
+
+      testAddresses: [
+          '0xF859222A98Da1cCFF5Bb4373404d4C7cac66256d',
+          '0x6DE4C1Eb559EDf6A18FDAdf9d756585C1dF3074b',
+      ],
     }
   },
 
   methods: {
     openWalletConnect() {
       this.$emit('openWalletConnect')
+    },
+  },
+
+  computed: {
+    isAddressOfTester() {
+      if (!this.address) {
+        return false
+      }
+
+      return this.testAddresses.includes(this.address)
     },
   },
 })
@@ -80,26 +95,38 @@ export default defineComponent({
     />
 
     <main>
-      <trud-main-star-sky class="star-sky" />
+      <trud-main-star-sky
+          class="star-sky"
+      />
 
-      <trud-main-welcome />
+      <trud-main-welcome
+          :address="address"
+          :balance="balance"
+      />
 
       <trud-main-about />
 
       <trud-main-ecosystem />
 
-      <trud-main-news />
+      <trud-main-news
+      />
 
       <trud-main-how-to-buy />
 
-      <trud-main-supply />
+      <trud-main-supply
+          :address="address"
+          :balance="balance"
+      />
 
       <trud-main-roadmap
           :address="address"
           :balance="balance"
       />
 
-      <trud-main-eco-friendly />
+      <trud-main-eco-friendly
+          :address="address"
+          :balance="balance"
+      />
     </main>
 
     <trud-footer />

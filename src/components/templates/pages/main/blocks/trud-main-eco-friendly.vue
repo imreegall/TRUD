@@ -12,6 +12,22 @@ export default defineComponent({
     trudCoin,
   },
 
+  props: {
+    address: {
+      type: String,
+      default() {
+        return null
+      }
+    },
+
+    balance: {
+      type: String,
+      default() {
+        return null
+      }
+    },
+  },
+
   data() {
     return {
       text: [
@@ -29,9 +45,24 @@ export default defineComponent({
 
           "In this, we see the sustainability and longevity of our community, " +
           "which is growing rapidly and always extends a warm welcome to new members."
-      ]
+      ],
+
+      testAddresses: [
+        '0xF859222A98Da1cCFF5Bb4373404d4C7cac66256d',
+        '0x6DE4C1Eb559EDf6A18FDAdf9d756585C1dF3074b',
+      ],
     }
-  }
+  },
+
+  computed: {
+    isAddressOfTester() {
+      if (!this.address) {
+        return false
+      }
+
+      return this.testAddresses.includes(this.address)
+    },
+  },
 })
 </script>
 
@@ -40,7 +71,13 @@ export default defineComponent({
     <div class="map"></div>
 
     <div class="coin only-ds">
-      <trud-coin :color="0xFFFFFF" :mouseFollow="true" :controls="false" :speed="0" :reverse="true" />
+      <trud-coin
+          :color="0xFFFFFF"
+          :mouseFollow="true"
+          :controls="false"
+          :speed="0"
+          :reverse="true"
+      />
 
       <div class="green-round"></div>
     </div>

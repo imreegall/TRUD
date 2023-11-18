@@ -10,6 +10,22 @@ export default defineComponent({
     trudCoin,
   },
 
+  props: {
+    address: {
+      type: String,
+      default() {
+        return null
+      }
+    },
+
+    balance: {
+      type: String,
+      default() {
+        return null
+      }
+    },
+  },
+
   data() {
     return {
       title: "The TRUD token stands for True Decentralization " +
@@ -63,6 +79,11 @@ export default defineComponent({
       code: "0x2e7729f4E4AA8E68D13830D372F975046d4a498F",
 
       isCopied: false,
+
+      testAddresses: [
+        '0xF859222A98Da1cCFF5Bb4373404d4C7cac66256d',
+        '0x6DE4C1Eb559EDf6A18FDAdf9d756585C1dF3074b',
+      ],
     }
   },
 
@@ -94,7 +115,17 @@ export default defineComponent({
 
       window.open(link, "_blank")
     },
-  }
+  },
+
+  computed: {
+    isAddressOfTester() {
+      if (!this.address) {
+        return false
+      }
+
+      return this.testAddresses.includes(this.address)
+    },
+  },
 })
 </script>
 
@@ -103,7 +134,12 @@ export default defineComponent({
     <div class="coin-wrapper">
       <div class="round"></div>
 
-      <trud-coin :color="0xFFFFFF" :mouseFollow="false" :controls="false" :speed="500" />
+      <trud-coin
+          :color="0xFFFFFF"
+          :mouseFollow="false"
+          :controls="false"
+          :speed="500"
+      />
     </div>
 
     <h1 class="title" v-html="title"></h1>
@@ -298,12 +334,12 @@ export default defineComponent({
       @media (min-width: $desktopScreenMinWidth)
 
       @media (max-width: $mobileScreenMaxWidth)
-        width: 400px
         flex-wrap: wrap
+        width: 100%
 
       .tag
         color: $green4
-        font-size: 17px
+        font-size: 15px
         line-height: 12px
         background-color: $wood
         +border-radius(999px)
@@ -315,7 +351,11 @@ export default defineComponent({
 
         @media (max-width: $mobileScreenMaxWidth)
           padding: 12px 16px
-          width: 140px
+          max-width: calc((100% - 20px) / 2)
+          width: 100%
+          text-overflow: ellipsis
+          white-space: nowrap
+          overflow: hidden
 
     .copy
       display: flex

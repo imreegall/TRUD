@@ -24,5 +24,5 @@ export default defineComponent({
 </template>
 
 <style scoped lang="sass">
-.trud-discord-logo
+
 </style>

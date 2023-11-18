@@ -118,6 +118,7 @@ export default defineComponent({
       +background-image-settings()
       +border-radius(20px)
       position: relative
+      overflow: hidden
 
       @media (min-width: $desktopScreenMinWidth)
         padding: 30px

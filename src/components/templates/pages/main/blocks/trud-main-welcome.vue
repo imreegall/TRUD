@@ -13,6 +13,41 @@ export default defineComponent({
 
     trudCoin,
   },
+
+  props: {
+    address: {
+      type: String,
+      default() {
+        return null
+      }
+    },
+
+    balance: {
+      type: String,
+      default() {
+        return null
+      }
+    },
+  },
+
+  data() {
+    return {
+      testAddresses: [
+        '0xF859222A98Da1cCFF5Bb4373404d4C7cac66256d',
+        '0x6DE4C1Eb559EDf6A18FDAdf9d756585C1dF3074b',
+      ],
+    }
+  },
+
+  computed: {
+    isAddressOfTester() {
+      if (!this.address) {
+        return false
+      }
+
+      return this.testAddresses.includes(this.address)
+    },
+  },
 })
 </script>
 
@@ -33,8 +68,21 @@ export default defineComponent({
 
       <!--    <img src="/assets/images/logos/trud.png" alt="" class="image">-->
       <div class="image">
-        <trud-coin class="only-ds" :color="0x00FF00" :mouseFollow="true" :controls="false" :speed="250" />
-        <trud-coin class="only-mb" :color="0x00FF00" :mouseFollow="false" :controls="false" :speed="250" />
+        <trud-coin
+            class="only-ds"
+            :color="0x00FF00"
+            :mouseFollow="true"
+            :controls="false"
+            :speed="250"
+        />
+
+        <trud-coin
+            class="only-mb"
+            :color="0x00FF00"
+            :mouseFollow="false"
+            :controls="false"
+            :speed="250"
+        />
 
         <div class="green-round"></div>
       </div>

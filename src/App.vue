@@ -64,6 +64,8 @@ export default {
     address: {
       immediate: true,
       async handler(newVal) {
+        console.log('address:', newVal)
+
         if (!newVal) {
           this.balance = null
 

@@ -8,6 +8,8 @@ import trudYoutubeLogo from "@/components/UI-kit/logos/trud-youtube-logo.vue";
 import trudMediumLogo from "@/components/UI-kit/logos/trud-medium-logo.vue";
 // import trudTiktokLogo from "@/components/UI-kit/logos/trud-tiktok-logo.vue";
 import trudInstagramLogo from "@/components/UI-kit/logos/trud-instagram-logo.vue";
+import trudGithubLogo from "@/components/UI-kit/logos/trud-github-logo.vue";
+import trudRedditLogo from "@/components/UI-kit/logos/trud-reddit-logo.vue";
 
 export default defineComponent({
   name: "trud-footer-socials",
@@ -20,6 +22,8 @@ export default defineComponent({
     trudMediumLogo,
     // trudTiktokLogo,
     trudInstagramLogo,
+    trudGithubLogo,
+    trudRedditLogo,
   },
 })
 </script>
@@ -63,6 +67,18 @@ export default defineComponent({
         <trud-medium-logo />
 
         <h1 class="title">MEDIUM</h1>
+      </a>
+
+      <a class="social" href="https://github.com/TRUD-token" target="_blank">
+        <trud-github-logo />
+
+        <h1 class="title">GITHUB</h1>
+      </a>
+
+      <a class="social" href="https://www.reddit.com/user/TRUDtoken" target="_blank">
+        <trud-reddit-logo />
+
+        <h1 class="title">REDDIT</h1>
       </a>
 
 <!--      <a class="social" href="https://www.tiktok.com/@historical.collection" target="_blank">-->
