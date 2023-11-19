@@ -30,21 +30,21 @@ export default defineComponent({
     return {
       seasons: {
         I: {
-          title: "Season I \"Knot\"",
+          title: "Season I",
           text: [
-            "To become part of our family, you must hold 1 TRUD in your wallet. " +
+            "To become a part of our family, you must hold 1 TRUD in your wallet. " +
             "This grants you access to the professor's chamber, " +
-            "where you can gain insights into the future of the world economy, " +
+            "where you can gain insights to the future of the world economy, " +
             "helping you understand unfolding events and guard against potential errors.",
 
             "We've enabled Uniswap for your convenience. " +
-            "Exchange 1 TRUD, link your wallet to the website, " +
+            "Exchange 1 TRUD, connect your wallet to the website, " +
             "and new opportunities will unfold in front of you.",
           ],
         },
 
         II: {
-          title: "Season 2 of \"Legends\" opens when the capitalization of TRUD reaches $ 1,000,000!",
+          title: "Season 2",
           text: [
               "It features a historical collection of legendary figures, " +
               "comprised of 1,000 unique NFT artworks on the Bitcoin blockchain. " +
@@ -55,7 +55,7 @@ export default defineComponent({
         },
 
         III: {
-          title: "Season 3 of \"Book & DAO\" opens with a capitalization of $10.000.000 TRUD!",
+          title: "Season 3",
           text: [
               "This marks the launch of new services, products, and DAO, " +
               "along with the inauguration of the TRUD millionaires club. " +
@@ -64,14 +64,14 @@ export default defineComponent({
         },
 
         IV: {
-          title: "Season 4 \"Put in\" opens when TRUD capitalization is $100,000,000",
+          title: "Season 4",
           text: [
               "This chapter entails an extensive promotion of the TRUD ecosystem.",
           ],
         },
 
         V: {
-          title: "Season 5<br>\"New Economic concept\"",
+          title: "Season 5",
           text: [
               "When the TRUD token reaches a value of $1, the experiment begins...",
           ],
@@ -143,7 +143,7 @@ export default defineComponent({
         <div class="buttons-group">
           <trud-button class="button" title="BUY TRUD" type="green" link="https://app.uniswap.org/swap?theme=dark&exactField=input&exactAmount=1&inputCurrency=eth&outputCurrency=0x2e7729f4E4AA8E68D13830D372F975046d4a498F" />
 
-          <trud-button class="button" title="GO TO ROOM" type="transparent" :show-soon="false" @click="handleRoomButtonClick" />
+          <trud-button class="button" title="BECOME A MEMBER" type="transparent" :show-soon="false" @click="handleRoomButtonClick" />
         </div>
       </main>
     </div>

@@ -51,14 +51,14 @@ export default defineComponent({
         {
           img: "new2.jpg",
           title: " Acquire the Rarest Ordinals with TRUD Tokens!",
-          description: "Have you ever dreamed of owning something unique from the cryptocurrency world? We have...",
+          description: "Have you ever dreamed of owning something unique from the cryptocurrency world?",
           link: "https://medium.com/@historicalcollectionart/acquire-the-rarest-ordinals-with-trud-tokens-457df396b168",
         },
 
         {
           img: "new1.png",
           title: "Hire an Army of AI Promoters for Your Social Media!",
-          description: "Have you ever dreamed of having your own AI promoter working tirelessly to make your brand.....",
+          description: "Have you ever dreamed of having your own AI promoter working tirelessly...",
           link: "https://medium.com/@historicalcollectionart/hire-an-army-of-ai-promoters-for-your-social-media-c8977d3a7f7b",
         },
       ],

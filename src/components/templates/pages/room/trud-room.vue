@@ -14,14 +14,28 @@ export default defineComponent({
       type: String,
       default() {
         return null
-      }
+      },
     },
 
     balance: {
       type: String,
       default() {
         return null
-      }
+      },
+    },
+
+    trudTokenMinValue: {
+      type: Number,
+      default() {
+        return 0
+      },
+    },
+
+    modalLoaded: {
+      type: Boolean,
+      default() {
+        return false
+      },
     },
   },
 
@@ -78,15 +92,23 @@ export default defineComponent({
         `,
 
       lang: 'en',
+
+      waitWalletConnect: true,
     }
   },
 
   async beforeMount() {
-    if (this.balance >= 1) {
-      return
-    }
+    this.waitWalletConnect = true
 
-    this.$router.push('/')
+    setTimeout(() => {
+      if (this.isProfessorAllow) {
+        this.waitWalletConnect = false
+
+        return
+      }
+
+      this.$router.push('/')
+    }, 7500)
   },
 
   mounted() {
@@ -113,6 +135,10 @@ export default defineComponent({
         return
       }
 
+      if (this.waitWalletConnect) {
+        return
+      }
+
       const text = this.$refs.input.value
 
       if (!text) {
@@ -133,6 +159,10 @@ export default defineComponent({
         return
       }
 
+      if (this.waitWalletConnect) {
+        return
+      }
+
       const text = this.$refs.input.value
 
       await this.sendMessage(text)
@@ -142,6 +172,10 @@ export default defineComponent({
 
     async handleExampleClick(e) {
       if (this.waitMessage) {
+        return
+      }
+
+      if (this.waitWalletConnect) {
         return
       }
 
@@ -230,6 +264,43 @@ export default defineComponent({
       this.waitMessage = false
     }
   },
+
+  computed: {
+    isProfessorAllow() {
+      if (!this.trudTokenMinValue) {
+        return true
+      }
+
+      if (!this.address) {
+        return false
+      }
+
+      if (!this.balance) {
+        return false
+      }
+
+      return this.balance >= this.trudTokenMinValue
+    },
+  },
+
+  watch: {
+    modalLoaded: {
+      immediate: true,
+      handler(newVal) {
+        console.log('modalLoaded:', newVal)
+
+        if (!newVal) {
+          return
+        }
+
+        if (this.isProfessorAllow) {
+          return
+        }
+
+        this.$router.push('/')
+      },
+    },
+  },
 })
 </script>
 
@@ -298,7 +369,7 @@ export default defineComponent({
         <div
             class="user"
             :class="{
-              active: botMessages.length || waitMessage
+              active: (botMessages.length || waitMessage)
             }"
         >
           <div class="user-messages-wrapper">
@@ -314,10 +385,10 @@ export default defineComponent({
           <div
               class="input"
               :class="{
-                disabled: this.waitMessage,
+                disabled: waitMessage || waitWalletConnect,
               }"
           >
-            <template v-if="this.waitMessage">
+            <template v-if="waitMessage || waitWalletConnect">
               <svg class="loader" width="800px" height="800px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <g>
                   <path fill="none" d="M0 0h24v24H0z"/>
@@ -344,7 +415,7 @@ export default defineComponent({
                 type="text"
                 placeholder="Or write your question...."
                 ref="input"
-                :disabled="this.waitMessage"
+                :disabled="waitMessage || waitWalletConnect"
                 @submit="handleSendInputButtonClick"
                 @keyup="handleSendInputButtonKeyUp"
             >

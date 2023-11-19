@@ -57,16 +57,30 @@ export default defineComponent({
 
     let address = null
 
-    watch(events, async () => {
-      const newAddress = await getAccount().address || null
+    watch(events, async (event) => {
+      console.log('event:', event.data.event)
+
+      const account = await getAccount()
+
+      console.log('account:', account)
+
+      const newAddress = account.address || null
 
       if (address === newAddress) {
+        if (event.data.event === "MODAL_LOADED") {
+          await emit('onLoadModal', true)
+        }
+
         return
       }
 
       address = newAddress
 
-      emit('updateData', address)
+      await emit('updateData', address)
+
+      if (event.data.event === "MODAL_LOADED") {
+        await emit('onLoadModal', true)
+      }
     }, {
       deep: true,
     })

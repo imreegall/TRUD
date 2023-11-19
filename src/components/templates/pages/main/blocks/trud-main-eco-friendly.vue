@@ -96,7 +96,7 @@ export default defineComponent({
         </template>
       </div>
 
-      <trud-button class="button" title="INTAKE FORM" type="darkGreen" />
+      <trud-button class="button" title="FILL THE FORM" type="darkGreen" />
     </main>
   </div>
 </template>
