@@ -58,11 +58,13 @@ export default defineComponent({
 
       botTemperature: 1.0,
 
-      maxTokensPerMinute: 3,
-
       openAIApiKey: null,
       maxTokens: 1024,
       botEngineName: "text-davinci-003",
+
+      tokensPerInterval: 1,
+      oldRequests: 3500,
+      interval: 60000 / this.oldRequests,
 
       botPromptEn: `
         Respond in the most original manner possible.
@@ -94,6 +96,8 @@ export default defineComponent({
       lang: 'en',
 
       waitWalletConnect: true,
+
+      axiosInstance: null,
     }
   },
 
@@ -111,18 +115,30 @@ export default defineComponent({
     }, 7500)
   },
 
-  mounted() {
+  async mounted() {
     this.openAIApiKey = process.env.VUE_APP_OPENAI_API_KEY
 
-    this.openAI = new OpenAI({
+    this.openAI = await new OpenAI({
       apiKey: this.openAIApiKey,
       dangerouslyAllowBrowser: true,
     })
 
-    this.baltazarLimiter = new RateLimiter({
-      tokensPerInterval: this.maxTokensPerMinute,
-      interval: 'minute',
+    this.baltazarLimiter = await new RateLimiter({
+      tokensPerInterval: this.tokensPerInterval,
+      interval: this.interval,
     })
+
+    this.axiosInstance = await this.axios.create({
+      proxy: {
+        protocol: 'https',
+        host: '37.19.220.129',
+        port: 8443,
+        // auth: {
+        //   username: 'ypSWqR',
+        //   password: 'Pboa7Y',
+        // },
+      },
+    });
   },
 
   methods: {
@@ -189,26 +205,103 @@ export default defineComponent({
       return !russianRegex.test(text);
     },
 
+    parseDuration(duration) {
+      const regex = /(\d+(\.\d+)?)([h|m|s])/g;
+      let match;
+      let totalMilliseconds = 0;
+
+      while ((match = regex.exec(duration)) !== null) {
+        const value = parseFloat(match[1]);
+        const unit = match[3];
+
+        if (unit === 's') {
+          totalMilliseconds += value * 1000; // 1 секунда = 1000 миллисекунд
+        } else if (unit === 'm') {
+          totalMilliseconds += value * 60 * 1000; // 1 минута = 60 секунд = 60,000 миллисекунд
+        } else if (unit === 'h') {
+          totalMilliseconds += value * 60 * 60 * 1000; // 1 час = 60 минут = 3,600,000 миллисекунд
+        }
+      }
+
+      return totalMilliseconds;
+    },
+
+    sleep(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    },
+
     async putBaltazar(message) {
-      await this.baltazarLimiter.removeTokens(1)
-
-      this.lang = this.isEnglish(message) ? 'en' : 'ru'
-
       try {
-        const prompt = this.lang === 'en' ?
-            this.botPromptEn + `\nAnswer to my question:\n${ message }` :
-            this.botPromptRu + `\nОтветь на мой вопрос:\n${ message} `
+        let isFinish = false
+        let chatCompletion
 
-        const chatCompletion = await this.openAI.completions.create({
-          prompt,
-          model: this.botEngineName,
-          temperature: this.botTemperature,
-          max_tokens: this.maxTokens
-        }, {maxRetries: 5, });
+        this.lang = this.isEnglish(message) ? 'en' : 'ru'
 
-        return {
-          status: true,
-          text: chatCompletion.choices[0].text
+        while (!isFinish) {
+          try {
+            console.log('Remove token')
+
+            await this.baltazarLimiter.removeTokens(1)
+
+            const prompt = this.lang === 'en' ?
+                `${ this.botPromptEn }\nAnswer to my question:\n${ message }` :
+                `${ this.botPromptRu }\nОтветь на мой вопрос:\n${ message }`
+
+            console.log('Try to Request axios')
+
+            chatCompletion = await this.axiosInstance.post(
+                `https://api.openai.com/v1/engines/${ this.botEngineName }/completions`,
+
+                {
+                  prompt,
+                  temperature: this.botTemperature,
+                  max_tokens: this.maxTokens,
+                },
+
+                {
+                  headers: {
+                    'Authorization': `Bearer ${ this.openAIApiKey }`,
+                  },
+                },
+            )
+
+            isFinish = true
+
+            return {
+              status: true,
+              text: chatCompletion.data.choices[0].text,
+            }
+          } catch (error) {
+            console.log('error')
+
+            let resetTokensMs = 0;
+
+            if (error.code === 'ECONNRESET') {
+              console.error('Proxy/Internet_connection Error:', error);
+            } else if (error.response && error.response.status && (error.response.status == 429 || error.response.status >= 500)) {
+              console.error('ChatGPT Request Sending Error:', error);
+
+              if (error.response && error.response.headers) {
+                const limitRequests = parseInt(error.response.headers['x-ratelimit-limit-requests']);
+
+                if (limitRequests !== this.oldRequests) {
+                  this.oldRequests = limitRequests
+                  this.baltazarLimiter = await new RateLimiter({
+                    tokensPerInterval: this.tokensPerInterval,
+                    interval: 60000 / limitRequests,
+                  })
+                }
+
+                resetTokensMs = this.parseDuration(error.response.headers['x-ratelimit-reset-tokens']);
+              }
+            } else  {
+              console.error('Unknown Error:', error);
+            }
+
+            console.log(`sleep ${ resetTokensMs || 60 }s`)
+
+            await this.sleep(resetTokensMs || 60 * 1000)
+          }
         }
       } catch (error) {
         console.error('ChatGPT Request Sending Error:', error);

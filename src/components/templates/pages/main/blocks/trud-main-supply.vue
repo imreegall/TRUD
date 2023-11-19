@@ -57,7 +57,7 @@ export default defineComponent({
       tags: [
         {
           title: "dextools".toUpperCase(),
-          link: "",
+          link: "https://www.dextools.io/app/ether/pair-explorer/0x0f5cc4bb5c21234abd765987e5584fa2b94053b2",
         },
 
         {
