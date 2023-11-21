@@ -49,7 +49,7 @@ export default defineComponent({
               "It features a historical collection of legendary figures, " +
               "comprised of 1,000 unique NFT artworks on the Bitcoin blockchain. " +
               "This is one of the first collections created on Bitcoin and features genuine crypto artifacts. " +
-              "Each Historical NFT is valued at 199000 TRUD, " +
+              "Each Historical NFT is valued at 396000 TRUD, " +
               "and this launch coincides with the formation of the collectors' club of the same name.",
           ],
         },

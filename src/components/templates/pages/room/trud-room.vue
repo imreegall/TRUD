@@ -56,7 +56,7 @@ export default defineComponent({
 
       baltazarLimiter: null,
 
-      botTemperature: 1.0,
+      botTemperature: null,
 
       openAIApiKey: null,
       maxTokens: 1024,
@@ -66,38 +66,16 @@ export default defineComponent({
       oldRequests: 3500,
       interval: 60000 / this.oldRequests,
 
-      botPromptEn: `
-        Respond in the most original manner possible.
-        Condition: You are Professor Balthazar. Get fully into character.
-        Condition: Maximum creativity and expression.
-        Condition: Use emojis
-        Use temperature ${ this.temperature }.
-        We've created our token as well as a collection of NFT coins. In total, we have two products: Our token, TRUD, and our NFT collection: Historical Collection.
-        On our TRUD token website, we've created Professor Balthazar - a character based on ChatGPT, who holds all the information about our project.
-        You will, in the role of Professor Balthazar, answer my questions and talk about the project.
-        Remember what I'm about to tell you about the future of Bitcoin:
-        You've entered Professor Balthazar's closed room! I promised to share with you knowledge about upcoming events in the global economy. Well, listen closely... Currently, the world is testing a new form of fiat money. It's called CBDC - central bank digital currency. Under the guise of technology, 'THEY' will take ultimate control over money, making it impossible to hide any transaction and providing the ability to freeze funds at any moment. Cash will cease to be issued; their circulation will decrease each year until a complete transition to CBDC is achieved, followed by the abandonment of any paper currency. Firstly, paper money is counterfeited, gaining its own seigniorage - income from the production of paper money, the difference between nominal and production cost. Secondly, it's impossible to track the complete movement of cash, and thirdly, most importantly, it's impossible to confiscate or freeze cash without physical intervention. Imagine being able to press a button and freeze-delete money from any pocket, cancel a transaction, or automatically collect fines, taxes, or any payment, leaving no escape. That's what our future money will be like. In exchange, we'll have limited issuance, leading to constant price reduction. Therefore, despite complete control over your wallet, you'll have money that constantly grows in value. Deal?) - Yes, of course! The rich will become astronomically wealthy, and by wealth, I mean the availability of material goods. There's no need to fear these changes; they're inevitable. We're already being controlled by laws, cameras, law enforcement - the wallet is all that's left! This is not slavery, as it might seem at first glance. This is a new order awaiting us! In the right hands, these tools will present a new, progressive world; in the wrong hands, they will be used to the detriment of humanity, imposing false values and a model of behavior akin to swine, dividing the world!
-        `,
-
-      botPromptRu: `
-        Отвечай максимально оригинально.
-        Условие: ты - Профессор Бальтазар. Максимально вживайся в роль
-        Условие: максимальная креативность и экспрессия.
-        Условие: используй смайлики
-        Используй temperature ${ this.temperature }
-        Мы создали свой токен, а также NFT-коллекцию монет. Итого, у нас два продукта: Наш токен: TRUD, Наша NFT-коллекция: Historical Collection
-        На нашем сайте с токеном TRUD мы создали профессора Бальтазара - это персонаж на базе ChatGPT, который владеет всей информацией о нашем проекте.
-        Ты будешь в роли профессора Бальтазара отвечать на мои вопросы и рассказывать о проекте.
-        Всегда обращайся на "ты".
-        Запомни что я тебе скажу про будущее биткоина:
-        Ты попал в закрытую комнату профессора Бальтазара! Я обещал поделиться с тобой знаниями о будующих событиях в мировой экономике. Чтож, слушай внимательно... Сейчас в мире тестируют новую форму фиатных денег. Называется она CBDC - central bank digital currency. Под видом технологии !ОНИ! возьмут последний контроль над деньгами, чтобы невозможно было скрыть ни одну сделку и в любой момент была возможность заморозить деньги. Наличные перестанут выпускать, их будет становиться в обороте меньше с каждым годом, пока не будет совершен полный переход на CBDC, далее последует отказ от любых бумажных купюр. Во первых, бумажные купюры подделывают, получая свой собственный сеньерадж - это доход от производства бумажных купюр, разница между номиналом и стоимостью изготовления. Во вторых, отследить полное передвижение наличных купюр нереально и в третьих, что самое важное, это невозможность конфискации, заморозки наличных без физического вмешательства. Представьте, что можно нажать на кнопку и заморозить-удалить деньги из любого кармана, отменить операцию или автоматически взыскать штраф, налог, любой платеж и от этого некуда будет деться. Вот такими будут будущие наши с вами деньги. Взамен мы получим ограниченную эмиссию и как следствие постоянное снижение цен. Поэтому, несмотря на полную власть над вашим кошельком вы получите постоянно растущие в цене деньги. Deal?) - Yes, of cource! Богатые станут космически богаты, под богатством я сейчас подразумеваю доступность материальных благ. Не стоит бояться этих перемен, они неизбежны. Нас и так уже контролируют законами, камерами, правоохранительными органами, остался кошелек! Все это не рабство, как вам могло показаться на первый всзгляд. Все это - новый порядок, который нас ждет! В одних руках эти инструменты подарят новый, прогрессирующий мир, в других руках их будут использовать во вред человеку, навязывая ему лживые ценности и модель поведения свиньи, мир разделится!
-        `,
+      botPromptEn: null,
+      botPromptRu: null,
 
       lang: 'en',
 
       waitWalletConnect: true,
 
       axiosInstance: null,
+
+      proxy: null,
     }
   },
 
@@ -118,6 +96,16 @@ export default defineComponent({
   async mounted() {
     this.openAIApiKey = process.env.VUE_APP_OPENAI_API_KEY
 
+    this.botTemperature = process.env.VUE_APP_BALTAZAR_TEMPERATURE
+    this.botPromptEn = process.env.VUE_APP_BALTAZAR_PROMPT_EN
+    this.botPromptRu = process.env.VUE_APP_BALTAZAR_PROMPT_RU
+
+    this.proxy = {
+      protocol: 'https',
+      host: process.env.VUE_APP_PROXY_ADDRESS,
+      port: process.env.VUE_APP_PROXY_PORT,
+    }
+
     this.openAI = await new OpenAI({
       apiKey: this.openAIApiKey,
       dangerouslyAllowBrowser: true,
@@ -131,14 +119,10 @@ export default defineComponent({
     this.axiosInstance = await this.axios.create({
       proxy: {
         protocol: 'https',
-        host: '37.19.220.129',
-        port: 8443,
-        // auth: {
-        //   username: 'ypSWqR',
-        //   password: 'Pboa7Y',
-        // },
+        host: process.env.VUE_APP_PROXY_ADDRESS,
+        port: process.env.VUE_APP_PROXY_PORT,
       },
-    });
+    })
   },
 
   methods: {
@@ -239,40 +223,44 @@ export default defineComponent({
 
         while (!isFinish) {
           try {
-            console.log('Remove token')
+            // console.log('Remove token')
 
             await this.baltazarLimiter.removeTokens(1)
 
-            const prompt = this.lang === 'en' ?
-                `${ this.botPromptEn }\nAnswer to my question:\n${ message }` :
-                `${ this.botPromptRu }\nОтветь на мой вопрос:\n${ message }`
+            // const prompt = this.lang === 'en' ?
+            //     `${ this.botPromptEn }\nAnswer to my question:\n${ message }` :
+            //     `${ this.botPromptRu }\nОтветь на мой вопрос:\n${ message }`
 
-            console.log('Try to Request axios')
+            // console.log('Try to Request axios')
 
-            chatCompletion = await this.axiosInstance.post(
-                `https://api.openai.com/v1/engines/${ this.botEngineName }/completions`,
+            // chatCompletion = await this.axiosInstance.post(
+            //     `https://api.openai.com/v1/engines/${ this.botEngineName }/completions`,
+            //
+            //     {
+            //       prompt,
+            //       temperature: this.botTemperature,
+            //       max_tokens: this.maxTokens,
+            //     },
+            //
+            //     {
+            //       headers: {
+            //         'Authorization': `Bearer ${ this.openAIApiKey }`,
+            //       },
+            //     },
+            // )
 
-                {
-                  prompt,
-                  temperature: this.botTemperature,
-                  max_tokens: this.maxTokens,
-                },
-
-                {
-                  headers: {
-                    'Authorization': `Bearer ${ this.openAIApiKey }`,
-                  },
-                },
-            )
+            chatCompletion = await this.axiosInstance.put(`https://api.roskainc.com/api/store/v1/users/proxy`, { message })
 
             isFinish = true
 
+            // console.log('res:', chatCompletion)
+
             return {
               status: true,
-              text: chatCompletion.data.choices[0].text,
+              text: chatCompletion.data.text,
             }
           } catch (error) {
-            console.log('error')
+            // console.log('error:', error)
 
             let resetTokensMs = 0;
 
@@ -298,7 +286,7 @@ export default defineComponent({
               console.error('Unknown Error:', error);
             }
 
-            console.log(`sleep ${ resetTokensMs || 60 }s`)
+            // console.log(`sleep ${ resetTokensMs || 60 }s`)
 
             await this.sleep(resetTokensMs || 60 * 1000)
           }

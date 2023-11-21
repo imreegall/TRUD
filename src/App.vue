@@ -36,6 +36,8 @@ export default {
       trudTokenMinValue: 1,
 
       modalLoaded: false,
+
+      axios,
     }
   },
 
