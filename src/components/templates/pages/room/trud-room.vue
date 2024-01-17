@@ -418,7 +418,7 @@ export default defineComponent({
               class="welcome-message only-ds"
               v-if="!botMessages.length && !waitMessage"
           >
-            <h3 class="title">Hello and welcome to my digital office! How can I assist you today? </h3>
+            <h3 class="title">Hello and welcome to my digital office! What do you want to know?</h3>
           </div>
 
           <div
@@ -440,7 +440,7 @@ export default defineComponent({
               v-if="!botMessages.length && !waitMessage"
           >
             <div class="welcome-message">
-              <h3 class="title">Hello and welcome to my digital office! How can I assist you today?</h3>
+              <h3 class="title">Hello and welcome to my digital office! What do you want to know?</h3>
             </div>
 
             <div class="npc"></div>
