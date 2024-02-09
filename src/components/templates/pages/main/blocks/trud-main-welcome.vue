@@ -63,7 +63,7 @@ export default defineComponent({
 
         <h5 class="description">This is the root of TRUD</h5>
 
-        <trud-button class="button" title="BUY TRUD" type="green" link="https://app.uniswap.org/swap?theme=dark&exactField=input&exactAmount=1&inputCurrency=eth&outputCurrency=0x2e7729f4E4AA8E68D13830D372F975046d4a498F" />
+        <trud-button class="button" title="BUY TRUD" type="green" link="https://app.uniswap.org/swap?outputCurrency=0x2e7729f4e4aa8e68d13830d372f975046d4a498f" />
       </main>
 
       <!--    <img src="/assets/images/logos/trud.png" alt="" class="image">-->

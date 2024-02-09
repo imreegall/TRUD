@@ -94,6 +94,10 @@ export default {
         await this.getBalance(newVal)
       }
     }
+  },
+
+  mounted() {
+    console.log('test', process.env.VUE_APP_PROXY_PORT)
   }
 }
 </script>
